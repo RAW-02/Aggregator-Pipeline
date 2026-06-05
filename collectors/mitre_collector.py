@@ -5,21 +5,27 @@ MITRE_API_URL = "https://cveawg.mitre.org/api/cve/"
 CVE_PATTERN = r"^CVE-\d{4}-\d+$"
 
 input = "CVE-2021-44228"
+def validate_cve(cve_id):
+    return bool(re.match(CVE_PATTERN, cve_id))
+
+if not validate_cve(input):
+    raise ValueError("Invalid CVE format")
+
 
 class MITRECollector:
     def __init__(self, timeout=15):
         self.timeout = timeout
 
-    def fetch_cve(self, cve_id: str) -> dict:
+    def fetch_CVE_MITRE(self, cve_id: str) -> dict:
         url = f"{MITRE_API_URL}{cve_id}"
 
         response = requests.get(url, timeout=self.timeout)
         response.raise_for_status()
         raw_data = response.json()
 
-        return self._normalize(raw_data)
+        return raw_data
 
-    def _normalize(self, raw_data: dict) -> dict:
+    def normalize_mitre_raw_data(self, raw_data: dict) -> dict:
         metadata = raw_data.get("cveMetadata", {})
         cna = (raw_data.get("containers", {}).get("cna", {}))
         description = ""
@@ -44,12 +50,13 @@ class MITRECollector:
             "last_modified": metadata.get("dateUpdated").split("T")[0],
             "references": references
         }
-
+        
         return normalized
     
-
-def validate_cve(cve_id):
-    return bool(re.match(CVE_PATTERN, cve_id))
-
-if not validate_cve(input):
-    raise ValueError("Invalid CVE format")
+    def print_mitre_result(results):
+        print("MITRE Output : ")
+        print("CVE_ID: ", results["cve_id"])
+        print("Description: ", results["description"])
+        print("Published Date: ", results["published_date"])
+        print("Last Modified: ", results["last_modified"])
+        print("References: ", results["references"])
