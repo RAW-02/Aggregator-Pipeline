@@ -4,19 +4,17 @@ import re
 MITRE_API_URL = "https://cveawg.mitre.org/api/cve/"
 CVE_PATTERN = r"^CVE-\d{4}-\d+$"
 
-input = "CVE-2021-44228"
-def validate_cve(cve_id):
-    return bool(re.match(CVE_PATTERN, cve_id))
-
-if not validate_cve(input):
-    raise ValueError("Invalid CVE format")
-
-
 class MITRECollector:
     def __init__(self, timeout=15):
         self.timeout = timeout
 
+    def validate_cve(cve_id):
+        return bool(re.match(CVE_PATTERN, cve_id))
+
     def fetch_CVE_MITRE(self, cve_id: str) -> dict:
+        if not MITRECollector.validate_cve(cve_id):
+            raise ValueError("Invalid CVE format")
+    
         url = f"{MITRE_API_URL}{cve_id}"
 
         response = requests.get(url, timeout=self.timeout)
@@ -25,7 +23,7 @@ class MITRECollector:
 
         return raw_data
 
-    def normalize_mitre_raw_data(self, raw_data: dict) -> dict:
+    def search_mitre_record_by_cve(self, raw_data: dict) -> dict:
         metadata = raw_data.get("cveMetadata", {})
         cna = (raw_data.get("containers", {}).get("cna", {}))
         description = ""
