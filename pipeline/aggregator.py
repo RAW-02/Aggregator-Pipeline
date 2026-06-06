@@ -1,15 +1,10 @@
 from collectors.mitre_collector import MITRECollector
-
 from collectors.exploitdb_collector import ExploitDBDataCollector
-
 from collectors.nvd_collector import NVDCollector
 from normalizer.nvd_normalizer import NVDDataNormalizer
 from search_optimizer.nvd_search import NVDSearchOptimizer
-
 from collectors.kve_collector import KEVLookup
-
 from collectors.epss_collector import EPSSLookup
-
 from github_engine.main import github_engine
 
 # MITRE INTEGRATION

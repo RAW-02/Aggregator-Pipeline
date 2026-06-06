@@ -12,7 +12,7 @@ from github_engine.query_classifier import classify_query
 from github_engine.correlation_engine import CorrelationEngine
 import json
 
-def github_engine(user_query):
+def github_engine(user_query, debug=False):
     collector = GitHubCollector()
     fetcher = ReadmeFetcher()
 
@@ -42,7 +42,11 @@ def github_engine(user_query):
     for repo in repos:
         builder.process_repo(repo, user_query)
     aliases = builder.build()
+
     engine = CorrelationEngine(repos, aliases, user_query)
     record = engine.build_record()
+    
+    if debug:
+        print(json.dumps(record, indent=4))
 
-    print("Github:\n", json.dumps(record, indent=4))
+    return record
