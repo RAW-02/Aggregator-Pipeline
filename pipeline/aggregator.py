@@ -1,7 +1,6 @@
 from collectors.mitre_collector import MITRECollector
 
 from collectors.exploitdb_collector import ExploitDBDataCollector
-from search_optimizer.exploitdb_search import ExploitDBSearchOptimizer
 
 from collectors.nvd_collector import NVDCollector
 from normalizer.nvd_normalizer import NVDDataNormalizer
@@ -15,42 +14,16 @@ from github_engine.main import github_engine
 
 # MITRE INTEGRATION
 # ---------------------------------------------------------------------
-mitre_collector = MITRECollector()
-mitre_data = mitre_collector.fetch_CVE_MITRE("CVE-2021-33766")                                # Input: CVE_ID
-
-normalize_mitre_data = mitre_collector.search_mitre_record_by_cve(mitre_data)
-
-MITRECollector.print_mitre_result(normalize_mitre_data)
+mitre = MITRECollector()
+mitre_result = mitre.get_mitre_result("CVE-2021-33766")                                 # Input: CVE_Id
+print(mitre_result)
 
 
 # EXPLOIT-DB INTEGRATION
 # ---------------------------------------------------------------------
 exploitdb_collector = ExploitDBDataCollector()
-exploitdb_raw_data = exploitdb_collector.fetch_exploits()
-
-exploitdb_normalized_data = exploitdb_collector.normalize_exploitdb_data(exploitdb_raw_data)
-
-exploitdb_optimize_search = ExploitDBSearchOptimizer()
-exploitdb_result = exploitdb_optimize_search.search(exploitdb_normalized_data, "CVE-2021-33766")      # Input: CVE/Product/Vendor/CWE/Severity/Description
-
-ExploitDBSearchOptimizer.print_exploitdb_output(exploitdb_result)
-
-
-# NVD INTEGRATION
-# ---------------------------------------------------------------------
-user_input = input("Enter keyword: ").strip()                                                 # Input: CVE/Keyword/Product/Vendor/Platform/ExploitId/Exploit_Type/Description
-nvd_collector = NVDCollector()
-exploitdb_raw_data = nvd_collector.fetch_NVD_data(user_input)
-
-nvd_normalize_data = []
-normalize_nvd_data = NVDDataNormalizer()
-for item in exploitdb_raw_data.get("vulnerabilities",[]):
-    nvd_normalize_data.append(normalize_nvd_data.get_result(item))
-
-nvd_optimize_search = NVDSearchOptimizer()
-nvd_results = nvd_optimize_search.search_vulnerabilities(nvd_normalize_data)
-
-NVDSearchOptimizer.print_nvd_output(nvd_results)
+exploitdb_result = exploitdb_collector.get_exploitdb_result("apache")                     # Input: CVE/Product/Vendor/CWE/Severity/Description
+print(exploitdb_result)
 
 
 # KEV (Known Exploited Vulnerabilities - lists CVEs that are actively being exploited in the wild. If a CVE is on this list, it represents an immediate threat)
@@ -70,3 +43,25 @@ print("EPS score: ", epss_result)
 # GITHUB ENGINE
 # ---------------------------------------------------------------------        
 github_result = github_engine("CVE-2021-33766")
+
+
+# NVD INTEGRATION:   Input: CVE/Keyword/Product/Vendor/Platform/ExploitId/Exploit_Type/Description
+# ---------------------------------------------------------------------            
+# NVD search by CVE
+nvd_collector = NVDCollector()
+nvd_result = nvd_collector.get_nvd_by_cve("CVE-2021-44726")
+print(nvd_result)
+
+
+
+# NVD search by Keywork                             
+
+# nvd_collector = NVDCollector()
+# nvd_raw_data = nvd_collector.fetch_NVD_data("apache".strip())
+# nvd_normalize_data = []
+# normalize_nvd_data = NVDDataNormalizer()
+# for item in nvd_raw_data.get("vulnerabilities",[]):
+#     nvd_normalize_data.append(normalize_nvd_data.get_result(item))
+# nvd_optimize_search = NVDSearchOptimizer()
+# nvd_results = nvd_optimize_search.search_vulnerabilities(nvd_normalize_data)
+# NVDSearchOptimizer.print_nvd_output(nvd_results)

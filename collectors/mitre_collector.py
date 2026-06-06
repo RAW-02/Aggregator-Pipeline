@@ -8,6 +8,7 @@ class MITRECollector:
     def __init__(self, timeout=15):
         self.timeout = timeout
 
+    @staticmethod
     def validate_cve(cve_id):
         return bool(re.match(CVE_PATTERN, cve_id))
 
@@ -35,7 +36,6 @@ class MITRECollector:
         references = []
         for ref in cna.get("references", []):
             url = ref.get("url")
-
             if url:
                 references.append(url)
         
@@ -51,10 +51,6 @@ class MITRECollector:
         
         return normalized
     
-    def print_mitre_result(results):
-        print("MITRE Output : ")
-        print("CVE_ID: ", results["cve_id"])
-        print("Description: ", results["description"])
-        print("Published Date: ", results["published_date"])
-        print("Last Modified: ", results["last_modified"])
-        print("References: ", results["references"])
+    def get_mitre_result(self, cve_id: str) -> dict:
+        raw_data = self.fetch_CVE_MITRE(cve_id)
+        return self.search_mitre_record_by_cve(raw_data)

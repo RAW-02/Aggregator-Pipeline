@@ -53,6 +53,5 @@ class NVDDataNormalizer:
             cvss_score = score,
             severity = severity,
             cwe = self.extract_cwe(cve.get("weaknesses", [])),
-
             affected_products = self.extract_products(cve.get("configurations", []))
         )
