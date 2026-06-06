@@ -11,10 +11,12 @@ from collectors.kve_collector import KEVLookup
 
 from collectors.epss_collector import EPSSLookup
 
+from github_engine.main import github_engine
+
 # MITRE INTEGRATION
 # ---------------------------------------------------------------------
 mitre_collector = MITRECollector()
-mitre_data = mitre_collector.fetch_CVE_MITRE("CVE-2021-44228")                                # Input: CVE_ID
+mitre_data = mitre_collector.fetch_CVE_MITRE("CVE-2021-33766")                                # Input: CVE_ID
 
 normalize_mitre_data = mitre_collector.search_mitre_record_by_cve(mitre_data)
 
@@ -29,7 +31,7 @@ exploitdb_raw_data = exploitdb_collector.fetch_exploits()
 exploitdb_normalized_data = exploitdb_collector.normalize_exploitdb_data(exploitdb_raw_data)
 
 exploitdb_optimize_search = ExploitDBSearchOptimizer()
-exploitdb_result = exploitdb_optimize_search.search(exploitdb_normalized_data, "Apache")      # Input: CVE/Product/Vendor/CWE/Severity/Description
+exploitdb_result = exploitdb_optimize_search.search(exploitdb_normalized_data, "CVE-2021-33766")      # Input: CVE/Product/Vendor/CWE/Severity/Description
 
 ExploitDBSearchOptimizer.print_exploitdb_output(exploitdb_result)
 
@@ -54,12 +56,17 @@ NVDSearchOptimizer.print_nvd_output(nvd_results)
 # KEV (Known Exploited Vulnerabilities - lists CVEs that are actively being exploited in the wild. If a CVE is on this list, it represents an immediate threat)
 # ---------------------------------------------------------------------
 kev = KEVLookup()
-kev_result = kev.is_known_exploited("CVE-2021-44228")                           # Input: CVE_Id
+kev_result = kev.is_known_exploited("CVE-2021-33766")                           # Input: CVE_Id
 print("KVE: ", kev_result)
 
 
 # EPSS (Exploit Prediction Scoring System - probability (from 0 to 1, or 0% to 100%) that a specific CVE will be exploited in the wild within the next 30 days. It is a tool designed to help teams predict which vulnerabilities attackers are likely to target next)
 # ---------------------------------------------------------------------        
 epss = EPSSLookup()
-epss_result = epss.get_epss_score("CVE-2021-44228")                             # Input: CVE_Id
+epss_result = epss.get_epss_score("CVE-2021-33766")                             # Input: CVE_Id
 print("EPS score: ", epss_result)
+
+
+# GITHUB ENGINE
+# ---------------------------------------------------------------------        
+github_result = github_engine("CVE-2021-33766")
