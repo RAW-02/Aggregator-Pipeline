@@ -52,5 +52,6 @@ class MITRECollector:
         return normalized
     
     def get_mitre_result(self, cve_id: str) -> dict:
+        print("Mitre Data Collecting .....")
         raw_data = self.fetch_CVE_MITRE(cve_id)
         return self.search_mitre_record_by_cve(raw_data)

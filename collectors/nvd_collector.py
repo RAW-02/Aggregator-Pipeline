@@ -19,6 +19,7 @@ class NVDCollector:
         return response.json()
     
     def get_nvd_by_cve(self, cve_id):
+        print("NVD Data Collecting .......")
         response = requests.get(self.NVD_BASE_URL, params={"cveId": cve_id}, timeout=30)
         response.raise_for_status()
 

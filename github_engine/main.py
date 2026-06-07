@@ -13,6 +13,7 @@ from github_engine.correlation_engine import CorrelationEngine
 import json
 
 def github_engine(user_query, debug=False):
+    print("Github Resources Collecting ......")
     collector = GitHubCollector()
     fetcher = ReadmeFetcher()
 
