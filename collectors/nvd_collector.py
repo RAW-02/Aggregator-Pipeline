@@ -5,7 +5,7 @@ from normalizer.nvd_normalizer import NVDDataNormalizer
 class NVDCollector:
     NVD_BASE_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
 
-    def fetch_NVD_data(self, keyword: str, results_per_page: int = 10):
+    def fetch_NVD_data(self, keyword: str, results_per_page: int = 20):
         response = requests.get(
             self.NVD_BASE_URL,
             params={

@@ -5,7 +5,7 @@ from github_engine.models import RepoInfo
 class GitHubCollector:
     GITHUB_REPO_URL = "https://api.github.com/search/repositories"
 
-    def search_repositories(self, query, limit=10):
+    def search_repositories(self, query, limit=15):
         headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
 
         params = {"q": query, "sort": "stars", "order": "desc", "per_page": limit}

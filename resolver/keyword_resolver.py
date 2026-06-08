@@ -1,32 +1,22 @@
-from collectors.nvd_collector import NVDCollector
-
+from resolver.alias_resolver import AliasResolver
+from resolver.product_resolver import ProductResolver
 
 class KeywordResolver:
-
     def __init__(self):
-        self.nvd = NVDCollector()
+        self.product = ProductResolver()
+        self.alias = AliasResolver()
 
-    def resolve(self, keyword):
-        raw = self.nvd.fetch_NVD_data(keyword)
+    def resolve(self, query):
         results = []
+        results.extend(
+            self.product.resolve(query)
 
-        seen = set()
-        for vuln in raw.get("vulnerabilities", []):
-            cve = vuln["cve"]
-            cve_id = cve.get("id")
-
-            if cve_id in seen:
-                continue
-
-            seen.add(cve_id)
-
-            results.append({
-                "cve_id": cve_id,
-                "published": cve.get("published", ""),
-                "last_modified": cve.get("lastModified", "")
-
-            })
-
-        results.sort(key=lambda x: x["published"],reverse=True)
+        )
+        results.extend(
+            self.alias.resolve(query)
+        )
 
         return results
+    
+
+    
