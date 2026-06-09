@@ -17,3 +17,4 @@ def enrichment_sync():
     repository = JsonRepository()
     cves = repository.get_all_cve_ids()
     runner.refresh_batch(cves)
+    sync.update_last_sync("enrichment")
