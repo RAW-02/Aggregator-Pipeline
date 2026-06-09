@@ -1,7 +1,7 @@
 from pipeline.aggregation_pipeline import AggregationPipeline
 
 pipeline = AggregationPipeline()
-record = pipeline.run("CVE-2026-39588")
+record = pipeline.run("CVE-2024-33849")
 
 # Batch / Bulk CVE Processing
 # from scheduler.pipeline_runner import PipelineRunner
