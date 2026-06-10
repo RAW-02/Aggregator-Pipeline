@@ -33,7 +33,8 @@ class SearchService:
 
                         "github_aliases^4"
 
-                    ]
+                    ],
+                    "fuzziness": "AUTO"
                 }
             }
         }
@@ -42,6 +43,7 @@ class SearchService:
             index=self.index_name,
             body=query
         )
+    
 
     # =====================================================
     # CVE SEARCH
@@ -52,7 +54,7 @@ class SearchService:
         query = {
             "query": {
                 "term": {
-                    "cve_id.keyword": cve_id
+                    "cve_id": cve_id.upper()
                 }
             }
         }
@@ -61,6 +63,8 @@ class SearchService:
             index=self.index_name,
             body=query
         )
+
+
 
     # =====================================================
     # PRODUCT SEARCH
@@ -109,7 +113,7 @@ class SearchService:
         query = {
             "query": {
                 "term": {
-                    "severity.keyword": severity
+                    "severity": severity.upper()
                 }
             }
         }
@@ -118,6 +122,7 @@ class SearchService:
             index=self.index_name,
             body=query
         )
+    
 
     # =====================================================
     # KEV SEARCH

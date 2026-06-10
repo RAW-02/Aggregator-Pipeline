@@ -74,6 +74,7 @@ class ElasticsearchRepository(VulnerabilityRepository):
                         "cve_id",
                         "description",
                         "products",
+                        "product_keywords",
                         "severity",
                         "cwe"
                     ]
