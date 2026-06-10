@@ -1,7 +1,9 @@
+import json
 from dataclasses import asdict
 
 from storage.elasticsearch_client import ElasticsearchClient
 from storage.vulnerability_repo import VulnerabilityRepository
+
 
 
 class ElasticsearchRepository(VulnerabilityRepository):
@@ -13,8 +15,17 @@ class ElasticsearchRepository(VulnerabilityRepository):
 
         if not self.client.indices.exists(index=self.index_name):
 
+            with open(
+                "storage/index_mapping.json",
+                "r",
+                encoding="utf-8"
+            ) as f:
+
+                mapping = json.load(f)
+
             self.client.indices.create(
-                index=self.index_name
+                index=self.index_name,
+                body=mapping
             )
 
     def upsert(self, record):
