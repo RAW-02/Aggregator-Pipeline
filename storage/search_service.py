@@ -407,7 +407,66 @@ class SearchService:
             size
         )
     
-   
+
+    
+    def search_with_filters(
+        self,
+        filters,
+        page=1,
+        size=20
+    ):
+
+        must_conditions = []
+
+        if "severity" in filters:
+            must_conditions.append(
+                {
+                    "term": {
+                        "severity": filters["severity"]
+                    }
+                }
+            )
+
+        if "kev" in filters:
+            must_conditions.append(
+                {
+                    "term": {
+                        "kev_status": True
+                    }
+                }
+            )
+
+        if "exploit" in filters:
+            must_conditions.append(
+                {
+                    "term": {
+                        "exploit_available": True
+                    }
+                }
+            )
+
+        if "cwe" in filters:
+            must_conditions.append(
+                {
+                    "match": {
+                        "cwe": filters["cwe"]
+                    }
+                }
+            )
+
+        query = {
+            "query": {
+                "bool": {
+                    "must": must_conditions
+                }
+            }
+        }
+
+        return self._execute_search(
+            query,
+            page,
+            size
+        )
     
 
     

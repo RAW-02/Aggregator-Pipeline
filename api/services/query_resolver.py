@@ -4,12 +4,13 @@ import re
 from storage.search_service import SearchService
 
 
+
 class QueryResolver:
 
     def __init__(self):
         self.search = SearchService()
 
-    # def resolve(self, query: str):
+    
     def resolve(
         self,
         query: str,
@@ -19,7 +20,60 @@ class QueryResolver:
 
         q = query.lower().strip()
 
-       
+        # print(f"QUERY RECEIVED = [{q}]")
+
+        filters = {}
+
+        # =====================================================
+        # FILTERS
+        # severity:critical
+        # kev:true
+        # exploit:true
+        # cwe:cwe-78
+        # =====================================================
+
+        severity_filter = re.search(
+            r"severity:(critical|high|medium|low)",
+            q
+        )
+
+        if severity_filter:
+            filters["severity"] = (
+                severity_filter.group(1).upper()
+            )
+
+        # if "kev:true" in q:
+        #     filters["kev"] = True
+
+        # if "exploit:true" in q:
+        #     filters["exploit"] = True
+
+
+        if "kev:true" in q:
+            print("KEV FILTER DETECTED")
+            filters["kev"] = True
+
+        if "exploit:true" in q:
+            print("EXPLOIT FILTER DETECTED")
+            filters["exploit"] = True
+        
+
+        cwe_filter = re.search(
+            r"cwe:(cwe-\d+)",
+            q
+        )
+
+        if cwe_filter:
+            filters["cwe"] = (
+                cwe_filter.group(1).upper()
+            )
+
+        if filters:
+            return self.search.search_with_filters(
+                filters,
+                page,
+                size
+            )
 
         # =====================================================
         # CVE
