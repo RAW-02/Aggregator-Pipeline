@@ -7,6 +7,22 @@ class SearchService:
         self.es = ElasticsearchClient().get_client()
         self.index_name = "vulnerabilities"
 
+    def _execute_search(
+        self,
+        query,
+        page=1,
+        size=20
+    ):
+
+        from_ = (page - 1) * size
+
+        return self.es.search(
+            index=self.index_name,
+            body=query,
+            from_=from_,
+            size=size
+        )
+
     # =====================================================
     # FULL TEXT SEARCH
     # =====================================================
@@ -18,11 +34,8 @@ class SearchService:
         size=20
     ):
 
-        from_ = (page - 1) * size
 
         query = {
-            "from": from_,
-            "size": size,
             "query": {
                 "multi_match": {
                     "query": query_text,
@@ -42,9 +55,10 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
        
 
@@ -52,7 +66,7 @@ class SearchService:
     # CVE SEARCH
     # =====================================================
 
-    def search_by_cve(self, cve_id):
+    def search_by_cve(self, cve_id,page=1,size=20):
 
         query = {
             "query": {
@@ -62,9 +76,10 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
 
@@ -73,7 +88,7 @@ class SearchService:
     # PRODUCT SEARCH
     # =====================================================
 
-    def search_by_product(self, product):
+    def search_by_product(self, product,page=1,size=20):
 
         query = {
             "query": {
@@ -99,16 +114,17 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # CWE SEARCH
     # =====================================================
 
-    def search_by_cwe(self, cwe):
+    def search_by_cwe(self, cwe,page=1,size=20):
 
         query = {
             "query": {
@@ -118,9 +134,10 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
@@ -134,11 +151,7 @@ class SearchService:
         size=20
     ):
 
-        from_ = (page - 1) * size
-
         query = {
-            "from": from_,
-            "size": size,
             "query": {
                 "term": {
                     "severity": severity.upper()
@@ -146,9 +159,10 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
     
 
@@ -156,7 +170,7 @@ class SearchService:
     # KEV SEARCH
     # =====================================================
 
-    def search_kev(self):
+    def search_kev(self,page=1,size=20):
 
         query = {
             "query": {
@@ -166,16 +180,17 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # EXPLOIT AVAILABLE
     # =====================================================
 
-    def search_exploitable(self):
+    def search_exploitable(self,page=1,size=20):
 
         query = {
             "query": {
@@ -185,16 +200,17 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # HIGH EPSS
     # =====================================================
 
-    def search_high_epss(self, minimum_score=0.7):
+    def search_high_epss(self, minimum_score=0.7,page=1,size=20):
 
         query = {
             "query": {
@@ -206,16 +222,17 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # HIGH CVSS
     # =====================================================
 
-    def search_high_cvss(self, minimum_score=7.0):
+    def search_high_cvss(self, minimum_score=7.0,page=1,size=20):
 
         query = {
             "query": {
@@ -227,16 +244,17 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # HIGH THREAT SCORE
     # =====================================================
 
-    def search_high_threat(self, minimum_score=80):
+    def search_high_threat(self, minimum_score=80,page=1,size=20):
 
         query = {
             "query": {
@@ -248,16 +266,17 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # GITHUB POCS AVAILABLE
     # =====================================================
 
-    def search_with_pocs(self):
+    def search_with_pocs(self,page=1,size=20):
 
         query = {
             "query": {
@@ -269,16 +288,17 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # PUBLISHED AFTER DATE
     # =====================================================
 
-    def search_published_after(self, date):
+    def search_published_after(self, date,page=1,size=20):
 
         query = {
             "query": {
@@ -290,16 +310,17 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # RECENTLY MODIFIED
     # =====================================================
 
-    def search_modified_after(self, date):
+    def search_modified_after(self, date,page=1,size=20):
 
         query = {
             "query": {
@@ -311,19 +332,20 @@ class SearchService:
             }
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # SORT BY THREAT SCORE
     # =====================================================
 
-    def top_threats(self, size=20):
+    def top_threats(self, page=1,size=20):
 
         query = {
-            "size": size,
+            
             "sort": [
                 {
                     "threat_score": {
@@ -333,19 +355,20 @@ class SearchService:
             ]
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # SORT BY EPSS
     # =====================================================
 
-    def top_epss(self, size=20):
+    def top_epss(self, page=1,size=20):
 
         query = {
-            "size": size,
+            
             "sort": [
                 {
                     "epss_score": {
@@ -355,19 +378,20 @@ class SearchService:
             ]
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
 
     # =====================================================
     # SORT BY CVSS
     # =====================================================
 
-    def top_cvss(self, size=20):
+    def top_cvss(self, page=1,size=20):
 
         query = {
-            "size": size,
+            
             "sort": [
                 {
                     "cvss_score": {
@@ -377,10 +401,13 @@ class SearchService:
             ]
         }
 
-        return self.es.search(
-            index=self.index_name,
-            body=query
+        return self._execute_search(
+            query,
+            page,
+            size
         )
+    
+   
     
 
     

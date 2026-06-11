@@ -28,7 +28,9 @@ class QueryResolver:
 
         if q.startswith("cve-"):
             return self.search.search_by_cve(
-                query.upper()
+                query.upper(),
+                page,
+                size
             )
 
         # =====================================================
@@ -95,12 +97,17 @@ class QueryResolver:
 
         if cvss_match:
             return self.search.search_high_cvss(
-                float(cvss_match.group(1))
+                float(cvss_match.group(1)),
+                page,
+                size
             )
 
         if q in ["cvss", "cvss_score"]:
-            return self.search.top_cvss()
-
+            return self.search.top_cvss(
+                page,
+                size
+            )
+        
         # =====================================================
         # EPSS
         # epss > 0.8
@@ -115,11 +122,16 @@ class QueryResolver:
 
         if epss_match:
             return self.search.search_high_epss(
-                float(epss_match.group(1))
+                float(epss_match.group(1)),
+                page,
+                size
             )
 
         if q in ["epss", "epss_score"]:
-            return self.search.top_epss()
+            return self.search.top_epss(
+                page,
+                size
+            )
 
         # =====================================================
         # THREAT SCORE
@@ -135,11 +147,16 @@ class QueryResolver:
 
         if threat_match:
             return self.search.search_high_threat(
-                float(threat_match.group(1))
+                float(threat_match.group(1)),
+                page,
+                size
             )
 
         if q in ["threat", "threat_score"]:
-            return self.search.top_threats()
+            return self.search.top_threats(
+                page,
+                size
+            )
 
         # =====================================================
         # CWE
@@ -154,22 +171,30 @@ class QueryResolver:
 
         if cwe_match:
             return self.search.search_by_cwe(
-                f"CWE-{cwe_match.group(1)}"
-            )
+            f"CWE-{cwe_match.group(1)}",
+            page,
+            size
+        )
 
         # =====================================================
         # KEV
         # =====================================================
 
         if q == "kev":
-            return self.search.search_kev()
+            return self.search.search_kev(
+                page,
+                size
+            )
 
         # =====================================================
         # EXPLOIT
         # =====================================================
 
         if q == "exploit":
-            return self.search.search_exploitable()
+            return self.search.search_exploitable(
+                page,
+                size
+            )
 
         # =====================================================
         # PRODUCT SEARCH
@@ -184,7 +209,11 @@ class QueryResolver:
         # PRODUCT SEARCH (dynamic)
         # =====================================================
 
-        product_results = self.search.search_by_product(q)
+        product_results = self.search.search_by_product(
+            q,
+            page,
+            size
+        )
 
         if product_results["hits"]["total"]["value"] > 0:
             return product_results
