@@ -9,7 +9,13 @@ class QueryResolver:
     def __init__(self):
         self.search = SearchService()
 
-    def resolve(self, query: str):
+    # def resolve(self, query: str):
+    def resolve(
+        self,
+        query: str,
+        page: int = 1,
+        size: int = 20
+    ):
 
         q = query.lower().strip()
 
@@ -36,16 +42,32 @@ class QueryResolver:
         # =====================================================
 
         if q == "critical":
-            return self.search.search_by_severity("CRITICAL")
+            return self.search.search_by_severity(
+                "CRITICAL",
+                page,
+                size
+            )
 
         if q == "high":
-            return self.search.search_by_severity("HIGH")
+            return self.search.search_by_severity(
+                "HIGH",
+                page,
+                size
+            )
 
         if q == "medium":
-            return self.search.search_by_severity("MEDIUM")
+            return self.search.search_by_severity(
+                "MEDIUM",
+                page,
+                size
+            )
 
         if q == "low":
-            return self.search.search_by_severity("LOW")
+            return self.search.search_by_severity(
+                "LOW",
+                page,
+                size
+            )
 
         severity_match = re.search(
             r"severity\s*:?\s*(critical|high|medium|low)",
@@ -54,7 +76,9 @@ class QueryResolver:
 
         if severity_match:
             return self.search.search_by_severity(
-                severity_match.group(1).upper()
+                severity_match.group(1).upper(),
+                page,
+                size
             )
 
         # =====================================================
@@ -170,4 +194,9 @@ class QueryResolver:
         # =====================================================
 
         
-        return self.search.full_text_search(query)
+        
+        return self.search.full_text_search(
+            query,
+            page,
+            size
+        )

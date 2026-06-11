@@ -11,32 +11,30 @@ class SearchService:
     # FULL TEXT SEARCH
     # =====================================================
 
-    def full_text_search(self, query_text):
+    def full_text_search(
+        self,
+        query_text,
+        page=1,
+        size=20
+    ):
 
-        
+        from_ = (page - 1) * size
 
         query = {
+            "from": from_,
+            "size": size,
             "query": {
                 "multi_match": {
                     "query": query_text,
                     "fields": [
-
                         "cve_id^15",
-
                         "description^10",
-
                         "products^8",
-
                         "product_keywords^12",
-
                         "severity^5",
-
                         "cwe^8",
-
                         "github_aliases^6",
-
                         "references"
-
                     ],
                     "type": "best_fields",
                     "fuzziness": "AUTO"
@@ -46,13 +44,9 @@ class SearchService:
 
         return self.es.search(
             index=self.index_name,
-            body=query,
-            size=50
+            body=query
         )
-        print(
-            "FOUND =",
-            result["hits"]["total"]["value"]
-        )
+       
 
     # =====================================================
     # CVE SEARCH
@@ -133,9 +127,18 @@ class SearchService:
     # SEVERITY SEARCH
     # =====================================================
 
-    def search_by_severity(self, severity):
+    def search_by_severity(
+        self,
+        severity,
+        page=1,
+        size=20
+    ):
+
+        from_ = (page - 1) * size
 
         query = {
+            "from": from_,
+            "size": size,
             "query": {
                 "term": {
                     "severity": severity.upper()
