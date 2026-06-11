@@ -13,27 +13,32 @@ class SearchService:
 
     def full_text_search(self, query_text):
 
+        
+
         query = {
             "query": {
                 "multi_match": {
                     "query": query_text,
                     "fields": [
 
-                        "cve_id^10",
+                        "cve_id^15",
 
-                        "description^8",
+                        "description^10",
 
-                        "products^6",
+                        "products^8",
+
+                        "product_keywords^12",
 
                         "severity^5",
 
-                        "cwe^5",
+                        "cwe^8",
 
-                        "references^3",
+                        "github_aliases^6",
 
-                        "github_aliases^4"
+                        "references"
 
                     ],
+                    "type": "best_fields",
                     "fuzziness": "AUTO"
                 }
             }
@@ -41,9 +46,13 @@ class SearchService:
 
         return self.es.search(
             index=self.index_name,
-            body=query
+            body=query,
+            size=50
         )
-    
+        print(
+            "FOUND =",
+            result["hits"]["total"]["value"]
+        )
 
     # =====================================================
     # CVE SEARCH
@@ -74,8 +83,24 @@ class SearchService:
 
         query = {
             "query": {
-                "match": {
-                    "products": product
+                "bool": {
+                    "should": [
+
+                        {
+                            "match": {
+                                "product_keywords": product
+                            }
+                        },
+
+                        {
+                            "wildcard": {
+                                "products.keyword": {
+                                    "value": f"*{product.lower()}*"
+                                }
+                            }
+                        }
+
+                    ]
                 }
             }
         }
@@ -353,3 +378,6 @@ class SearchService:
             index=self.index_name,
             body=query
         )
+    
+
+    
