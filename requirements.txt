@@ -1,2 +1,12 @@
 pandas
 requests
+
+
+
+#build excel using(for export download feature)
+openpyxl
+
+
+
+#build PDF using(for export feature)
+reportlab

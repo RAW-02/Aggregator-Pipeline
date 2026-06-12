@@ -771,3 +771,68 @@ class SearchService:
             index=self.index_name,
             body=query
         )
+    
+
+
+    def get_vulnerability(self, cve_id):
+
+        query = {
+            "query": {
+                "term": {
+                    "cve_id": cve_id.upper()
+                }
+            }
+        }
+
+        result = self.es.search(
+            index=self.index_name,
+            body=query,
+            size=1
+        )
+
+        hits = result["hits"]["hits"]
+
+        if not hits:
+            return None
+
+        doc = hits[0]["_source"]
+        return self.transform_vulnerability(doc)
+    
+
+
+
+    def transform_vulnerability(self, doc):
+
+        return {
+            "cve_id": doc.get("cve_id"),
+
+            "overview": {
+                "severity": doc.get("severity"),
+                "description": doc.get("description"),
+                "published_date": doc.get("published_date"),
+                "last_modified": doc.get("last_modified")
+            },
+
+            "scores": {
+                "cvss": doc.get("cvss_score"),
+                "epss": doc.get("epss_score"),
+                "threat": doc.get("threat_score")
+            },
+
+            "status": {
+                "kev": doc.get("kev_status"),
+                "exploit_available": doc.get("exploit_available")
+            },
+
+            "cwe": doc.get("cwe"),
+
+            "products": doc.get("product_keywords", []),
+
+            "github": {
+                "repo_count": doc.get("github_repository_count", 0)
+            },
+
+            "exploits": doc.get("exploits", []),
+
+            "references": doc.get("references", [])
+        }
