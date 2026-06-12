@@ -5,8 +5,4 @@ class CollectStage:
         self.aggregator = VulnerabilityAggregator()
 
     def execute(self, cve):
-        """
-        Collect data from all collectors
-        and build VulnerabilityRecord
-        """
         return self.aggregator.aggregate(cve)
