@@ -670,3 +670,23 @@ class SearchService:
                     }
                 )["count"]
         }
+    
+
+
+    def severity_distribution(self):
+
+        query = {
+            "size": 0,
+            "aggs": {
+                "severity_counts": {
+                    "terms": {
+                        "field": "severity"
+                    }
+                }
+            }
+        }
+
+        return self.es.search(
+            index=self.index_name,
+            body=query
+        )
