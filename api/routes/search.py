@@ -14,13 +14,15 @@ resolver = QueryResolver()
 def search(
     query: str,
     page: int = 1,
-    size: int = 20
+    size: int = 20,
+    sort: str | None = None
 ):
 
     result = resolver.resolve(
         query,
         page,
-        size
+        size,
+        sort
     )
 
     hits = result["hits"]["hits"]
@@ -31,6 +33,7 @@ def search(
     "query": query,
     "page": page,
     "size": size,
+    "sort": sort,
     "total": total,
     "total_pages": math.ceil(total / size),
     "count": len(hits),

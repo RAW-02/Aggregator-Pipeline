@@ -15,12 +15,12 @@ class QueryResolver:
         self,
         query: str,
         page: int = 1,
-        size: int = 20
+        size: int = 20,
+        sort: str = None
     ):
 
         q = query.lower().strip()
 
-        # print(f"QUERY RECEIVED = [{q}]")
 
         filters = {}
 
@@ -42,19 +42,10 @@ class QueryResolver:
                 severity_filter.group(1).upper()
             )
 
-        # if "kev:true" in q:
-        #     filters["kev"] = True
-
-        # if "exploit:true" in q:
-        #     filters["exploit"] = True
-
-
         if "kev:true" in q:
-            print("KEV FILTER DETECTED")
             filters["kev"] = True
 
         if "exploit:true" in q:
-            print("EXPLOIT FILTER DETECTED")
             filters["exploit"] = True
         
 
@@ -72,7 +63,8 @@ class QueryResolver:
             return self.search.search_with_filters(
                 filters,
                 page,
-                size
+                size,
+                sort
             )
 
         # =====================================================
@@ -84,7 +76,8 @@ class QueryResolver:
             return self.search.search_by_cve(
                 query.upper(),
                 page,
-                size
+                size,
+                sort
             )
 
         # =====================================================
@@ -101,28 +94,32 @@ class QueryResolver:
             return self.search.search_by_severity(
                 "CRITICAL",
                 page,
-                size
+                size,
+                sort
             )
 
         if q == "high":
             return self.search.search_by_severity(
                 "HIGH",
                 page,
-                size
+                size,
+                sort
             )
 
         if q == "medium":
             return self.search.search_by_severity(
                 "MEDIUM",
                 page,
-                size
+                size,
+                sort
             )
 
         if q == "low":
             return self.search.search_by_severity(
                 "LOW",
                 page,
-                size
+                size,
+                sort
             )
 
         severity_match = re.search(
@@ -134,7 +131,8 @@ class QueryResolver:
             return self.search.search_by_severity(
                 severity_match.group(1).upper(),
                 page,
-                size
+                size,
+                sort
             )
 
         # =====================================================
@@ -153,13 +151,15 @@ class QueryResolver:
             return self.search.search_high_cvss(
                 float(cvss_match.group(1)),
                 page,
-                size
+                size,
+                sort
             )
 
         if q in ["cvss", "cvss_score"]:
             return self.search.top_cvss(
                 page,
-                size
+                size,
+                sort
             )
         
         # =====================================================
@@ -178,13 +178,15 @@ class QueryResolver:
             return self.search.search_high_epss(
                 float(epss_match.group(1)),
                 page,
-                size
+                size,
+                sort
             )
 
         if q in ["epss", "epss_score"]:
             return self.search.top_epss(
                 page,
-                size
+                size,
+                sort
             )
 
         # =====================================================
@@ -203,13 +205,15 @@ class QueryResolver:
             return self.search.search_high_threat(
                 float(threat_match.group(1)),
                 page,
-                size
+                size,
+                sort
             )
 
         if q in ["threat", "threat_score"]:
             return self.search.top_threats(
                 page,
-                size
+                size,
+                sort
             )
 
         # =====================================================
@@ -227,7 +231,8 @@ class QueryResolver:
             return self.search.search_by_cwe(
             f"CWE-{cwe_match.group(1)}",
             page,
-            size
+            size,
+            sort
         )
 
         # =====================================================
@@ -237,7 +242,8 @@ class QueryResolver:
         if q == "kev":
             return self.search.search_kev(
                 page,
-                size
+                size,
+                sort
             )
 
         # =====================================================
@@ -247,7 +253,8 @@ class QueryResolver:
         if q == "exploit":
             return self.search.search_exploitable(
                 page,
-                size
+                size,
+                sort
             )
 
         # =====================================================
@@ -266,7 +273,8 @@ class QueryResolver:
         product_results = self.search.search_by_product(
             q,
             page,
-            size
+            size,
+            sort
         )
 
         if product_results["hits"]["total"]["value"] > 0:
@@ -281,5 +289,6 @@ class QueryResolver:
         return self.search.full_text_search(
             query,
             page,
-            size
+            size,
+            sort
         )
