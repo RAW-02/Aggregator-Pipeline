@@ -82,3 +82,29 @@ class JsonRepository(VulnerabilityRepository):
                 result.append(record)
 
         return result
+    
+
+    def update(self, cve_id, updates):
+        record = self.get(cve_id)
+
+        if record is None:
+            return
+
+        if is_dataclass(updates):
+            updates = asdict(updates)
+
+        record.update(updates)
+        path = self._file_path(cve_id)
+
+        with open(path, "w") as f:
+            json.dump(record, f, indent=4)
+
+    def get_unprocessed_nvd(self):
+        records = self.get_all()
+        result = []
+
+        for record in records:
+            if not record.get("nvd_processed", False):
+                result.append(record)
+
+        return result
