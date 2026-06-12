@@ -690,3 +690,84 @@ class SearchService:
             index=self.index_name,
             body=query
         )
+    
+
+
+    def top_products(self):
+
+        query = {
+            "size": 0,
+            "aggs": {
+                "top_products": {
+                    "terms": {
+                        "field": "product_keywords",
+                        "size": 10
+                    }
+                }
+            }
+        }
+
+        return self.es.search(
+            index=self.index_name,
+            body=query
+        )
+    
+
+
+    def top_cwes(self):
+
+        query = {
+            "size": 0,
+            "aggs": {
+                "top_cwes": {
+                    "terms": {
+                        "field": "cwe",
+                        "size": 10
+                    }
+                }
+            }
+        }
+
+        return self.es.search(
+            index=self.index_name,
+            body=query
+        )
+    
+
+    def dashboard_top_threats(self):
+
+        query = {
+            "size": 10,
+            "sort": [
+                {
+                    "threat_score": {
+                        "order": "desc"
+                    }
+                }
+            ]
+        }
+
+        return self.es.search(
+            index=self.index_name,
+            body=query
+        )
+    
+
+
+    def recent_cves(self):
+
+        query = {
+            "size": 10,
+            "sort": [
+                {
+                    "published_date": {
+                        "order": "desc"
+                    }
+                }
+            ]
+        }
+
+        return self.es.search(
+            index=self.index_name,
+            body=query
+        )
