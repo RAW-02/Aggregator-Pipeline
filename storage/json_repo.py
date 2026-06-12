@@ -1,6 +1,6 @@
 import json
 import os
-from dataclasses import asdict
+from dataclasses import asdict, is_dataclass
 from storage.vulnerability_repo import VulnerabilityRepository
 
 class JsonRepository(VulnerabilityRepository):
@@ -12,12 +12,19 @@ class JsonRepository(VulnerabilityRepository):
         return os.path.join(self.db_directory, f"{cve_id}.json")
 
     def upsert(self, record):
-        path = self._file_path(record.cve_id)
+        if record is None:
+            return
+        if is_dataclass(record):
+            data = asdict(record)
+        else:
+            data = record
 
-        with open(path, "w") as f:
-            json.dump(asdict(record), f, indent=4)
+        path = self._file_path(data["cve_id"])
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
 
     def bulk_upsert(self, records):
+        print("Bulk upserting on JsonRepository On Working ..........")
         for record in records:
             self.upsert(record)
 
@@ -65,3 +72,13 @@ class JsonRepository(VulnerabilityRepository):
                 results.append(record)
 
         return results
+    
+    def get_unprocessed_github(self):
+        records = self.get_all()
+
+        result = []
+        for record in records:
+            if not record.get("github_processed", False):
+                result.append(record)
+
+        return result
