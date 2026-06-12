@@ -590,4 +590,83 @@ class SearchService:
         )
     
 
-    
+    def dashboard_summary(self):
+
+        return {
+            "total_vulnerabilities":
+                self.es.count(
+                    index=self.index_name
+                )["count"],
+
+            "critical":
+                self.es.count(
+                    index=self.index_name,
+                    body={
+                        "query": {
+                            "term": {
+                                "severity": "CRITICAL"
+                            }
+                        }
+                    }
+                )["count"],
+
+            "high":
+                self.es.count(
+                    index=self.index_name,
+                    body={
+                        "query": {
+                            "term": {
+                                "severity": "HIGH"
+                            }
+                        }
+                    }
+                )["count"],
+
+            "medium":
+                self.es.count(
+                    index=self.index_name,
+                    body={
+                        "query": {
+                            "term": {
+                                "severity": "MEDIUM"
+                            }
+                        }
+                    }
+                )["count"],
+
+            "low":
+                self.es.count(
+                    index=self.index_name,
+                    body={
+                        "query": {
+                            "term": {
+                                "severity": "LOW"
+                            }
+                        }
+                    }
+                )["count"],
+
+            "kev":
+                self.es.count(
+                    index=self.index_name,
+                    body={
+                        "query": {
+                            "term": {
+                                "kev_status": True
+                            }
+                        }
+                    }
+                )["count"],
+
+            "exploitable":
+                self.es.count(
+                    index=self.index_name,
+                    body={
+                        "query": {
+                            "term": {
+                                "exploit_available": True
+                            }
+                        }
+                    }
+                )["count"]
+        }
