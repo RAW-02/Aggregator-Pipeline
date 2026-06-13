@@ -3,12 +3,12 @@ class ThreatScore:
     def calculate(record):
         score = 0
 
-        score += (record.cvss_score / 10) * 40
+        score += ((record.cvss_score or 0)/ 10) * 40
 
-        if record.kev_status:
+        if record.kev_status is True:
             score += 20
 
-        score += record.epss_score * 20
+        score += (record.epss_score or 0) * 20
 
         if record.exploit_available:
             score += 10

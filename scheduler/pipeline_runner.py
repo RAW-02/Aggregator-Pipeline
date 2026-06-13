@@ -1,5 +1,6 @@
 from pipeline.aggregation_pipeline import AggregationPipeline
 from pipeline.refresh_pipeline import RefreshPipeline
+from concurrent.futures import ThreadPoolExecutor
 
 class PipelineRunner:
     def __init__(self):
@@ -23,5 +24,19 @@ class PipelineRunner:
         return self.refresh_pipeline.run(cve)
 
     def refresh_batch(self, cves):
-        for cve in cves:
-            self.refresh(cve)
+        print("Batch Refreshing working, stay on the console ....")
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            results = list(executor.map(self.refresh, cves))
+            successful = []
+            failed = []
+
+            for result in results:
+                if result is None:
+                    failed.append(result)
+
+                else:
+                    successful.append(result)
+
+            print(f"Success : {len(successful)}")
+            print(f"Failed  : {len(failed)}")
+            return successful

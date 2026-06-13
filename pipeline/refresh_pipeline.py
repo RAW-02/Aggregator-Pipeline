@@ -1,3 +1,4 @@
+from pipeline.aggregation_pipeline import AggregationPipeline
 from pipeline.stages.refresh_collect import RefreshCollectStage
 from pipeline.stages.entichment import EnrichmentStage
 from pipeline.stages.score import ThreatScoreStage
@@ -7,6 +8,7 @@ from pipeline.stages.store import StorageStage
 
 class RefreshPipeline:
     def __init__(self):
+        self.aggregate = AggregationPipeline()
         self.collect = RefreshCollectStage()
         self.enrich = EnrichmentStage()
         self.score = ThreatScoreStage()
@@ -14,12 +16,18 @@ class RefreshPipeline:
         self.store = StorageStage()
 
     def run(self, cve):
-        record = self.collect.execute(cve)
-        if record is None:
-            return None
+        response = self.collect.execute(cve)
 
+        if response["status"] == "create":
+            print(f"{cve} not found locally.")
+            print("Creating new record...")
+            return self.aggregate.run(cve)
+
+        record = response["record"]
         record = self.enrich.execute(record)
         record = self.score.execute(record)
         record = self.validate.execute(record)
         self.store.execute(record)
+
+        print(f"{cve} refreshed successfully")
         return record
