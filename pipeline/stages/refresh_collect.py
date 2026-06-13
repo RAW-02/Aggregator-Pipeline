@@ -21,7 +21,10 @@ class RefreshCollectStage:
     def execute(self, cve):
         data = self.repository.get(cve)
         if data is None:
-            return None
+            return {
+                "status": "create",
+                "cve": cve
+            }
 
         record = VulnerabilityRecord(**data)
 
@@ -49,4 +52,7 @@ class RefreshCollectStage:
         record.github_top_scanners = github["top_scanners"]
         record.github_top_exploits = github["top_exploits"]
 
-        return record
+        return {
+            "status": "refresh",
+            "record": record
+        }

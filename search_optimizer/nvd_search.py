@@ -21,12 +21,3 @@ class NVDSearchOptimizer:
 
             results.append(vuln)
         return results
-
-    def print_nvd_output(results):
-        print("NVD Result: ")
-        for vuln in results:
-            print("-" * 80)
-            print(f"CVSS Score : {vuln.cvss_score}")
-            print(f"Severity   : {vuln.severity}")
-            print(f"CWE        : {vuln.cwe}")
-            print(f"Products   : {vuln.affected_products}")
