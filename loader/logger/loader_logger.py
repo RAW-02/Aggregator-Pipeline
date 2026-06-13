@@ -16,9 +16,7 @@ class LoaderLogger:
 
         handler = logging.FileHandler("logs/loader.log")
 
-        formatter = logging.Formatter(
-            "%(asctime)s | %(levelname)s | %(message)s"
-        )
+        formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
         handler.setFormatter(formatter)
 

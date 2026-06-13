@@ -2,16 +2,18 @@ from concurrent.futures import ThreadPoolExecutor
 
 from loader.batch.batch_loader import BatchLoader
 from loader.source.mitre_feed_source import MITREFeedSource
-from loader.worker.worker import Worker
+from loader.worker.mitre_worker import MitreWorker
 from loader.queue.failed_queue import FailedQueue
 from loader.stats.loader_stats import LoaderStats
 from loader.checkpoint.checkpoint_manager import CheckpointManager
 from storage.json_repo import JsonRepository
+from tqdm import tqdm
+from config.settings import BATCH_SIZE, MAX_WORKERS
 
 class InitialLoader:
     def __init__(self):
         self.source = MITREFeedSource()
-        self.worker = Worker()
+        self.worker = MitreWorker()
         self.repository = JsonRepository()
         self.stats = LoaderStats()
         self.failed_queue = FailedQueue()
@@ -20,16 +22,16 @@ class InitialLoader:
     def run(self):
         checkpoint = self.checkpoint.load()
 
-        iterator = self.source.get_all(
+        iterator = tqdm(self.source.get_all(
             last_cve=checkpoint["last_cve"]
-        )
+        ), desc="Loading CVEs")
 
-        for batch in BatchLoader.batches(iterator, batch_size=10):
+        for batch in BatchLoader.batches(iterator, batch_size=BATCH_SIZE):
             records = []
             batch_success = 0
             batch_failed = 0
 
-            with ThreadPoolExecutor(max_workers=10) as executor:
+            with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
                 results = list(executor.map(self.worker.process, batch))
 
             for mitre_json, result in zip(batch, results):

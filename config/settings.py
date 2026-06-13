@@ -1,0 +1,50 @@
+from pathlib import Path
+import os
+
+# ============================================
+# Base
+# ============================================
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# ============================================
+# Database
+# ============================================
+
+DATABASE_DIR = BASE_DIR / "database"
+
+VULNERABILITY_DIR = DATABASE_DIR / "vulnerabilities"
+
+INDEX_DIR = DATABASE_DIR / "index"
+
+CHECKPOINT_FILE = DATABASE_DIR / "checkpoint.json"
+
+FAILED_QUEUE_FILE = DATABASE_DIR / "failed_cves.json"
+
+# ============================================
+# Logs
+# ============================================
+
+LOG_DIR = BASE_DIR / "logs"
+
+# ============================================
+# Loader
+# ============================================
+
+BATCH_SIZE = 250
+
+MAX_WORKERS = 15
+
+# ============================================
+# API Sleep
+# ============================================
+
+NVD_DELAY = 1
+
+EPSS_DELAY = 0.5
+
+KEV_DELAY = 0.2
+
+EXPLOITDB_DELAY = 0.5
+
+GITHUB_DELAY = 3
