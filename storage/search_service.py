@@ -795,19 +795,72 @@ class SearchService:
         if not hits:
             return None
 
-        doc = hits[0]["_source"]
-        return self.transform_vulnerability(doc)
+        return self.format_vulnerability(
+            hits[0]["_source"]
+        )
+    
     
 
+    
+    def get_related_vulnerabilities(
+        self,
+        cve_id,
+        page=1,
+        size=10
+    ):
+
+        vuln = self.get_vulnerability(cve_id)
+
+        if not vuln:
+            return None
+
+        cwe_list = vuln.get("cwe", [])
+
+        if not cwe_list:
+            return {
+                "hits": {
+                    "hits": []
+                }
+            }
+
+        cwe = cwe_list[0]
+
+        query = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "term": {
+                                "cwe": cwe
+                            }
+                        }
+                    ],
+                    "must_not": [
+                        {
+                            "term": {
+                                "cve_id": cve_id.upper()
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+
+        return self._execute_search(
+            query,
+            page,
+            size
+        )
 
 
-    def transform_vulnerability(self, doc):
+    def format_vulnerability(self, doc):
 
         return {
-            "cve_id": doc.get("cve_id"),
 
             "overview": {
+                "cve_id": doc.get("cve_id"),
                 "severity": doc.get("severity"),
+                "cwe": doc.get("cwe"),
                 "description": doc.get("description"),
                 "published_date": doc.get("published_date"),
                 "last_modified": doc.get("last_modified")
@@ -816,23 +869,31 @@ class SearchService:
             "scores": {
                 "cvss": doc.get("cvss_score"),
                 "epss": doc.get("epss_score"),
-                "threat": doc.get("threat_score")
+                "threat_score": doc.get("threat_score")
             },
 
-            "status": {
-                "kev": doc.get("kev_status"),
-                "exploit_available": doc.get("exploit_available")
+            "risk": {
+                "kev_status": doc.get("kev_status"),
+                "exploit_available": doc.get("exploit_available"),
+                "exploit_count": doc.get("exploit_count")
             },
 
-            "cwe": doc.get("cwe"),
-
-            "products": doc.get("product_keywords", []),
+            "products": doc.get("products", []),
 
             "github": {
-                "repo_count": doc.get("github_repository_count", 0)
+                "repository_count":
+                    doc.get("github_repository_count"),
+
+                "top_pocs":
+                    doc.get("github_top_pocs", []),
+
+                "top_exploits":
+                    doc.get("github_top_exploits", []),
+
+                "top_scanners":
+                    doc.get("github_top_scanners", [])
             },
 
-            "exploits": doc.get("exploits", []),
-
-            "references": doc.get("references", [])
+            "references":
+                doc.get("references", [])
         }

@@ -11,6 +11,8 @@ from api.routes.vulnerability import router as vulnerability_router
 
 from api.routes.cve import router as cve_router
 
+from api.routes.analytics import router as analytics_router
+
 
 from api.routes.vulnerability import (
     router as vulnerability_router
@@ -34,3 +36,7 @@ app.include_router(cve_router)
 app.include_router(export_router)
 
 app.include_router(vulnerability_router)
+
+app.include_router(
+    analytics_router
+)
