@@ -1,0 +1,3 @@
+aws_region=AWS_REGION_CODE
+instance_type=INSTANCE_TYPE
+instance_name=EC2_INSTANCE_NAME

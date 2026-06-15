@@ -1,18 +1,8 @@
 from io import BytesIO
-from reportlab.platypus import (
-    SimpleDocTemplate,
-    Paragraph,
-    Spacer,
-    Table,
-    TableStyle
-)
-
+from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle)
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
-
-
 from openpyxl import Workbook
-
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
@@ -21,19 +11,13 @@ import csv
 
 from api.services.query_resolver import QueryResolver
 
-router = APIRouter(
-    prefix="/export",
-    tags=["Export"]
-)
+router = APIRouter(prefix="/export", tags=["Export"])
 
 resolver = QueryResolver()
 
 
 @router.get("/")
-def export_data(
-    query: str,
-    format: str = "json"
-):
+def export_data(query: str, format: str = "json"):
 
     result = resolver.resolve(
         query=query,
@@ -65,11 +49,8 @@ def export_data(
     # ==========================================
 
     if format.lower() == "csv":
-
         output = StringIO()
-
         writer = csv.writer(output)
-
         writer.writerow([
             "cve_id",
             "severity",
@@ -79,7 +60,6 @@ def export_data(
         ])
 
         for doc in data:
-
             writer.writerow([
                 doc.get("cve_id"),
                 doc.get("severity"),
@@ -114,11 +94,8 @@ def export_excel(query: str):
     )
 
     hits = result["hits"]["hits"]
-
     workbook = Workbook()
-
     sheet = workbook.active
-
     sheet.title = "Vulnerabilities"
 
     sheet.append([
@@ -130,9 +107,7 @@ def export_excel(query: str):
     ])
 
     for hit in hits:
-
         doc = hit["_source"]
-
         sheet.append([
             doc.get("cve_id"),
             doc.get("severity"),
@@ -142,9 +117,7 @@ def export_excel(query: str):
         ])
 
     buffer = BytesIO()
-
     workbook.save(buffer)
-
     buffer.seek(0)
 
     return StreamingResponse(
@@ -162,7 +135,6 @@ def export_excel(query: str):
 
 @router.get("/pdf")
 def export_pdf(query: str):
-
     result = resolver.resolve(
         query=query,
         page=1,
@@ -170,13 +142,9 @@ def export_pdf(query: str):
     )
 
     hits = result["hits"]["hits"]
-
     buffer = BytesIO()
-
     doc = SimpleDocTemplate(buffer)
-
     styles = getSampleStyleSheet()
-
     elements = []
 
     elements.append(
@@ -213,9 +181,7 @@ def export_pdf(query: str):
     ]]
 
     for hit in hits:
-
         doc_data = hit["_source"]
-
         table_data.append([
             str(doc_data.get("cve_id", "")),
             str(doc_data.get("severity", "")),
@@ -225,7 +191,6 @@ def export_pdf(query: str):
         ])
 
     table = Table(table_data)
-
     table.setStyle(
         TableStyle([
             ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
@@ -235,9 +200,7 @@ def export_pdf(query: str):
     )
 
     elements.append(table)
-
     doc.build(elements)
-
     buffer.seek(0)
 
     return StreamingResponse(

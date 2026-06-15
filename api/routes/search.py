@@ -1,13 +1,9 @@
 from fastapi import APIRouter
-
 import math
-
 from api.services.query_resolver import QueryResolver
 
 router = APIRouter()
-
 resolver = QueryResolver()
-
 
 
 @router.get("/search")
@@ -18,15 +14,8 @@ def search(
     sort: str | None = None
 ):
 
-    result = resolver.resolve(
-        query,
-        page,
-        size,
-        sort
-    )
-
+    result = resolver.resolve(query, page, size, sort)
     hits = result["hits"]["hits"]
-
     total = result["hits"]["total"]["value"]
 
     return {
@@ -44,16 +33,8 @@ def search(
 }
 
 
-
-def search_with_filters(
-    self,
-    filters,
-    page=1,
-    size=20
-):
-
+def search_with_filters(self, filters, page=1, size=20):
     must = []
-
     if filters.get("severity"):
         must.append({
             "term": {
