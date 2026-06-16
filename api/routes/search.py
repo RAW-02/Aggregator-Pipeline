@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 import math
-from fastapi.services.query_resolver import QueryResolver
+from api.services.query_resolver import QueryResolver
 
 router = APIRouter()
 resolver = QueryResolver()

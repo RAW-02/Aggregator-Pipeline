@@ -3,13 +3,12 @@ from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Table, Tab
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from openpyxl import Workbook
-from fastapi import APIRouter
-from fastapi import StreamingResponse
+from fastapi import APIRouter, StreamingResponse
 
 from io import StringIO
 import csv
 
-from fastapi.services.query_resolver import QueryResolver
+from api.services.query_resolver import QueryResolver
 
 router = APIRouter(prefix="/export", tags=["Export"])
 

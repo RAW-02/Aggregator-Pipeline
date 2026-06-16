@@ -1,5 +1,3 @@
-```yaml
-version: "3.9"
 
 services:
 
@@ -76,7 +74,7 @@ services:
 
   fastapi:
     build:
-      context: ..
+      context: .
       dockerfile: Docker/Dockerfile.fastapi
 
     container_name: fastapi
@@ -84,7 +82,7 @@ services:
     init: true
 
     env_file:
-      - ../.env
+      - .env
 
     ports:
       - "8000:8000"
@@ -108,13 +106,13 @@ services:
 
   scheduler:
     build:
-      context: ..
+      context: .
       dockerfile: Docker/Dockerfile.scheduler
 
     container_name: scheduler
 
     env_file:
-      - ../.env
+      - .env
 
     depends_on:
       opensearch:
@@ -133,4 +131,3 @@ volumes:
 networks:
   vulnerability-network:
     driver: bridge
-```
