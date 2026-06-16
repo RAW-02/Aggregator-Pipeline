@@ -1,10 +1,10 @@
 import json
-from storage.elasticsearch_repository import ElasticsearchRepository
+from storage.opensearch_repository import OpenSearchRepository
 
 
 class ReportGenerator:
     def generate(self):
-        repo = ElasticsearchRepository()
+        repo = OpenSearchRepository()
         
         records = repo.get_all()
         total = len(records)

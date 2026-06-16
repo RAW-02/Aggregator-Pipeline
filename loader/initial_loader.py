@@ -9,14 +9,14 @@ from loader.queue.failed_queue import FailedQueue
 from loader.stats.loader_stats import LoaderStats
 from loader.checkpoint.checkpoint_manager import CheckpointManager
 
-from storage.elasticsearch_repository import ElasticsearchRepository
+from storage.opensearch_repository import OpenSearchRepository
 from config.settings import BATCH_SIZE, MAX_WORKERS
 
 class InitialLoader:
     def __init__(self):
         self.source = MITREFeedSource()
         self.worker = MitreWorker()
-        self.repository = ElasticsearchRepository()
+        self.repository = OpenSearchRepository()
         self.stats = LoaderStats()
         self.failed_queue = FailedQueue()
         self.checkpoint = CheckpointManager()

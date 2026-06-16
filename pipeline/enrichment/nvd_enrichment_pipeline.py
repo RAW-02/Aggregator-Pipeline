@@ -1,10 +1,10 @@
 from collectors.nvd_collector import NVDCollector
-from storage.elasticsearch_repository import ElasticsearchRepository
+from storage.opensearch_repository import OpenSearchRepository
 
 class NVDEnrichmentPipeline:
     def __init__(self):
         self.nvd = NVDCollector()
-        self.repository = ElasticsearchRepository()
+        self.repository = OpenSearchRepository()
 
     def enrich(self, record):
         cve = record["cve_id"]

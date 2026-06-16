@@ -9,3 +9,7 @@ output "public_ip" {
 output "public_dns" {
   value = aws_instance.aggregator.public_dns
 }
+
+output "ssh_command" {
+  value = "ssh ubuntu@${aws_instance.aggregator.public_ip}"
+}

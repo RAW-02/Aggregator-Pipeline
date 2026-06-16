@@ -19,7 +19,7 @@ resource "aws_security_group" "UniVulner_Sec_Group" {
   }
 
   ingress {
-    description = "Elasticsearch"
+    description = "Opensearch"
     from_port   = 9200
     to_port     = 9200
     protocol    = "tcp"

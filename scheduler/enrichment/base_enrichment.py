@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
-
-from storage.elasticsearch_repository import ElasticsearchRepository
+from storage.opensearch_repository import OpenSearchRepository
 
 
 class BaseEnrichmentJob(ABC):
 
     def __init__(self):
-        self.repository = ElasticsearchRepository()
+        self.repository = OpenSearchRepository()
 
     @property
     @abstractmethod

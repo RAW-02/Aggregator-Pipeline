@@ -1,19 +1,20 @@
-from elasticsearch import Elasticsearch
+from opensearchpy import OpenSearch
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-class ElasticsearchClient:
+class OpenSearchClient:
 
     def __init__(self):
-
-        self.client = Elasticsearch(
+        self.client = OpenSearch(
             os.getenv("ELASTIC_HOST"),
             basic_auth=(
                 os.getenv("ELASTIC_USERNAME"),
                 os.getenv("ELASTIC_PASSWORD")
             ),
+            http_compress=True,
+            use_ssl=False,
             verify_certs=False
         )
 

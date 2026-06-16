@@ -1,9 +1,9 @@
-from storage.elasticsearch_repository import ElasticsearchRepository
+from storage.opensearch_repository import OpenSearchRepository
 
 class StorageStage:
 
     def __init__(self):
-        self.repository = ElasticsearchRepository()
+        self.repository = OpenSearchRepository()
 
     def execute(self, record):
 

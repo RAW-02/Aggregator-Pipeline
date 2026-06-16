@@ -1,4 +1,4 @@
-from storage.elasticsearch_repository import ElasticsearchRepository
+from storage.opensearch_repository import OpenSearchRepository
 
 from collectors.nvd_collector import NVDCollector
 from collectors.epss_collector import EPSSCollector
@@ -12,7 +12,7 @@ from schemas.vulnerability import VulnerabilityRecord
 
 class RefreshCollectStage:
     def __init__(self):
-        self.repository = ElasticsearchRepository()
+        self.repository = OpenSearchRepository()
         self.nvd = NVDCollector()
         self.epss = EPSSCollector()
         self.kev = KEVCollector()
@@ -21,10 +21,7 @@ class RefreshCollectStage:
     def execute(self, cve):
         data = self.repository.get(cve)
         if data is None:
-            return {
-                "status": "create",
-                "cve": cve
-            }
+            return {"status": "create", "cve": cve}
 
         record = VulnerabilityRecord(**data)
 

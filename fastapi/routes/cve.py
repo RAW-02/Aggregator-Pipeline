@@ -8,12 +8,9 @@ search_service = SearchService()
 
 @router.get("/{cve_id}")
 def get_cve(cve_id: str):
-    result = search_service.get_cve_details(cve_id)
+    result = search_service.get_vulnerability(cve_id)
 
     if not result:
-        raise HTTPException(
-            status_code=404,
-            detail="CVE not found"
-        )
+        raise HTTPException(status_code=404, detail="CVE not found")
 
     return result

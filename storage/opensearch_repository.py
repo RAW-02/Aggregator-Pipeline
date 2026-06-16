@@ -1,14 +1,14 @@
 import json
 from dataclasses import asdict, is_dataclass
 
-from storage.elasticsearch_client import ElasticsearchClient
+from storage.opensearch_client import OpenSearchClient
 from storage.vulnerability_repo import VulnerabilityRepository
 from opensearchpy.helpers import bulk
 
-class ElasticsearchRepository(VulnerabilityRepository):
+class OpenSearchRepository(VulnerabilityRepository):
 
     def __init__(self):
-        self.client = ElasticsearchClient().get_client()
+        self.client = OpenSearchClient().get_client()
         self.index_name = "vulnerabilities"
 
         if not self.client.indices.exists(index=self.index_name):
@@ -201,3 +201,6 @@ class ElasticsearchRepository(VulnerabilityRepository):
             records.append(hit["_source"])
 
         return records
+    
+    def get_unprocessed_github(self, limit=50):
+        return self.get_pending("github", limit)

@@ -1,20 +1,13 @@
-from storage.elasticsearch_client import ElasticsearchClient
+from storage.opensearch_client import OpenSearchClient
 
 
 class SearchService:
 
     def __init__(self):
-        self.es = ElasticsearchClient().get_client()
+        self.es = OpenSearchClient().get_client()
         self.index_name = "vulnerabilities"
 
-    def _execute_search(
-        self,
-        query,
-        page=1,
-        size=20
-    ):
-        
-
+    def _execute_search(self, query, page=1, size=20):
         from_ = (page - 1) * size
 
         return self.es.search(
