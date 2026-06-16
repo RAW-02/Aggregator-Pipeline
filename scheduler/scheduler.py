@@ -11,5 +11,8 @@ schedule.every().sunday.at("03:00").do(enrichment_sync)
 print("Scheduler Started...")
 
 while True:
-    schedule.run_pending()
+    try:
+        schedule.run_pending()
+    except Exception as e:
+        print(e)    
     time.sleep(30)

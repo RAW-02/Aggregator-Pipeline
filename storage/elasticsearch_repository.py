@@ -106,19 +106,38 @@ class ElasticsearchRepository(VulnerabilityRepository):
             }
         }
 
-        result = self.client.search(
-            index=self.index_name,
-            body=query,
-            size=10000
-        )
+        records = []
+        search_after = None
 
-        return result["hits"]["hits"]
+        while True:
+            body = query.copy()
+
+            if search_after:
+                body["search_after"] = search_after
+
+            result = self.client.search(
+                index=self.index_name,
+                body=body,
+                size=1000,
+                sort=["cve_id"]
+            )
+
+            hits = result["hits"]["hits"]
+            if not hits:
+                break
+
+            for hit in hits:
+                records.append(hit["_source"])
+
+            search_after = hits[-1]["sort"]
+
+        return records
+
 
     def count(self):
         return self.client.count(index=self.index_name)["count"]
     
     def update_fields(self, cve_id, updates):
-        
         self.client.update(
             index=self.index_name,
             id=cve_id,
@@ -126,3 +145,59 @@ class ElasticsearchRepository(VulnerabilityRepository):
                 "doc": updates
             }
         )
+
+    def get_all_cve_ids(self):
+        query = {
+            "_source": ["cve_id"],
+            "query": {"match_all": {}}
+        }
+
+        cves = []
+        search_after = None
+
+        while True:
+            if search_after:
+                query["search_after"] = search_after
+
+            result = self.client.search(
+                index=self.index_name,
+                body=query,
+                size=1000,
+                sort=["cve_id"]
+            )
+
+            hits = result["hits"]["hits"]
+            if not hits:
+                break
+
+            for hit in hits:
+                cves.append(hit["_source"]["cve_id"])
+
+            search_after = hits[-1]["sort"]
+
+        return cves
+    
+    def get_pending(self, field, limit=100):
+        query = {
+            "size": limit,
+            "query": {
+                "bool": {
+                    "must_not": {
+                        "term": {
+                            field: True
+                        }
+                    }
+                }
+            }
+        }
+
+        result = self.client.search(
+            index=self.index_name,
+            body=query
+        )
+
+        records = []
+        for hit in result["hits"]["hits"]:
+            records.append(hit["_source"])
+
+        return records

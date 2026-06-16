@@ -1,10 +1,10 @@
 from collectors.nvd_collector import NVDCollector
-from storage.json_repo import JsonRepository
+from storage.elasticsearch_repository import ElasticsearchRepository
 
 class NVDEnrichmentPipeline:
     def __init__(self):
         self.nvd = NVDCollector()
-        self.repository = JsonRepository()
+        self.repository = ElasticsearchRepository()
 
     def enrich(self, record):
         cve = record["cve_id"]
@@ -20,7 +20,7 @@ class NVDEnrichmentPipeline:
                 "nvd_processed": True
             }
 
-            self.repository.update(cve, updates)
+            self.repository.update_fields(cve, updates)
             return True
 
         except Exception as e:

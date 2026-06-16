@@ -1,7 +1,7 @@
 from scheduler.pipeline_runner import PipelineRunner
 from scheduler.sync_manager import SyncManager
 from collectors.registry import CollectorRegistry
-from storage.json_repo import JsonRepository
+from storage.elasticsearch_repository import ElasticsearchRepository
 
 runner = PipelineRunner()
 sync = SyncManager()
@@ -50,7 +50,7 @@ def refresh_all_sources():
 
 
 def enrichment_sync():
-    repository = JsonRepository()
+    repository = ElasticsearchRepository()
     cves = repository.get_all_cve_ids()
     
     print(f"Refreshing {len(cves)} stored CVEs")

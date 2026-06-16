@@ -1,7 +1,7 @@
-from storage.json_repo import JsonRepository
+from storage.elasticsearch_repository import ElasticsearchRepository
 from github_scheduler.github_runner import GithubRunner
 
-repository = JsonRepository()
+repository = ElasticsearchRepository()
 runner = GithubRunner()
 
 def github_sync():

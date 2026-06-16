@@ -4,12 +4,12 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from openpyxl import Workbook
 from fastapi import APIRouter
-from fastapi.responses import StreamingResponse
+from fastapi import StreamingResponse
 
 from io import StringIO
 import csv
 
-from api.services.query_resolver import QueryResolver
+from fastapi.services.query_resolver import QueryResolver
 
 router = APIRouter(prefix="/export", tags=["Export"])
 

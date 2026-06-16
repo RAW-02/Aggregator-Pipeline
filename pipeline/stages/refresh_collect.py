@@ -1,4 +1,4 @@
-from storage.json_repo import JsonRepository
+from storage.elasticsearch_repository import ElasticsearchRepository
 
 from collectors.nvd_collector import NVDCollector
 from collectors.epss_collector import EPSSCollector
@@ -12,7 +12,7 @@ from schemas.vulnerability import VulnerabilityRecord
 
 class RefreshCollectStage:
     def __init__(self):
-        self.repository = JsonRepository()
+        self.repository = ElasticsearchRepository()
         self.nvd = NVDCollector()
         self.epss = EPSSCollector()
         self.kev = KEVCollector()

@@ -33,6 +33,14 @@ services:
 
     restart: unless-stopped
 
+    mem_limit: 4g
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+
     networks:
       - vulnerability-network
 
@@ -54,6 +62,14 @@ services:
 
     restart: unless-stopped
 
+    mem_limit: 1g
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+
     networks:
       - vulnerability-network
 
@@ -64,6 +80,8 @@ services:
       dockerfile: Docker/Dockerfile.fastapi
 
     container_name: fastapi
+
+    init: true
 
     env_file:
       - ../.env
@@ -77,9 +95,16 @@ services:
 
     restart: unless-stopped
 
+    mem_limit: 1g
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+
     networks:
       - vulnerability-network
-
 
   scheduler:
     build:
@@ -96,26 +121,6 @@ services:
         condition: service_healthy
 
     restart: unless-stopped
-
-    networks:
-      - vulnerability-network
-
-
-  loader:
-    build:
-      context: ..
-      dockerfile: Docker/Dockerfile.loader
-
-    container_name: loader
-
-    env_file:
-      - ../.env
-
-    depends_on:
-      opensearch:
-        condition: service_healthy
-
-    restart: "no"
 
     networks:
       - vulnerability-network

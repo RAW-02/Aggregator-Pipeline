@@ -1,13 +1,12 @@
 from abc import ABC, abstractmethod
 
-from storage.json_repo import JsonRepository
+from storage.elasticsearch_repository import ElasticsearchRepository
 
 
 class BaseEnrichmentJob(ABC):
 
     def __init__(self):
-
-        self.repository = JsonRepository()
+        self.repository = ElasticsearchRepository()
 
     @property
     @abstractmethod
@@ -19,11 +18,7 @@ class BaseEnrichmentJob(ABC):
         pass
 
     def run(self, limit=100):
-
-        records = self.repository.get_pending(
-            self.source,
-            limit
-        )
+        records = self.repository.get_pending(self.source, limit)
 
         print()
         print(f"{self.source.upper()} Pending :", len(records))
@@ -32,17 +27,12 @@ class BaseEnrichmentJob(ABC):
         updated = 0
 
         for record in records:
-
             try:
-
                 self.enrich_record(record)
-
                 updated += 1
 
             except Exception as e:
-
                 print(e)
 
         print()
-
         print("Updated :", updated)
