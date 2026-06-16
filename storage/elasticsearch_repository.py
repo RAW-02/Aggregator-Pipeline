@@ -23,25 +23,38 @@ class ElasticsearchRepository(VulnerabilityRepository):
     def upsert(self, record):
         if is_dataclass(record):
             document = asdict(record)
+            cve_id = record.cve_id
         else:
             document = record
+            cve_id = record["cve_id"]
 
         return self.client.index(
             index=self.index_name,
-            id=record.cve_id,
+            id=cve_id,
             document=document
         )
 
     def bulk_upsert(self, records):
         actions = []
         for record in records:
+            if record is None:
+                continue
+
+            if is_dataclass(record):
+                document = asdict(record)
+                cve_id = record.cve_id
+            else:
+                document = record
+                cve_id = record["cve_id"]
+
             actions.append({
                 "_index": self.index_name,
-                "_id": record.cve_id,
-                "_source": asdict(record)
+                "_id": cve_id,
+                "_source": document
             })
 
-        bulk(self.client, actions)
+        if actions:
+            bulk(self.client, actions, refresh=False)
 
     def get(self, cve_id):
         try:

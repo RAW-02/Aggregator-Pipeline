@@ -31,9 +31,9 @@ LOG_DIR = BASE_DIR / "logs"
 # Loader
 # ============================================
 
-BATCH_SIZE = 250
+BATCH_SIZE = 300
 
-MAX_WORKERS = 15
+MAX_WORKERS = 10
 
 # ============================================
 # API Sleep
