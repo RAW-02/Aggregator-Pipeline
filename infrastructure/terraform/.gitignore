@@ -4,3 +4,24 @@
 terraform.tfvars
 .crash.log
 .terraform.lock.hcl
+
+# Private Keys
+*.pem
+*.key
+
+# Environment
+.env
+
+.terraform/
+terraform.tfstate
+terraform.tfstate.*
+terraform.tfvars
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/

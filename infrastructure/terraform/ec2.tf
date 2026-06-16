@@ -8,7 +8,7 @@ resource "aws_key_pair" "univulner" {
 }
 
 resource "local_file" "private_key" {
-  filename        = "univulner.pem"
+  filename        = var.private_key_path
   content         = tls_private_key.ssh.private_key_openssh
   file_permission = "0600"
 }
@@ -24,6 +24,8 @@ resource "aws_instance" "aggregator" {
 
   user_data = file("${path.module}/user_data.sh")
 
+  user_data_replace_on_change = true
+
   disable_api_termination = true
 
   associate_public_ip_address = true
@@ -36,5 +38,9 @@ resource "aws_instance" "aggregator" {
 
   tags = {
     Name = var.instance_name
+  }
+
+  metadata_options {
+    http_tokens = "required"
   }
 }

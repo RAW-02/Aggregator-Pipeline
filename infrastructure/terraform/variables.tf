@@ -14,6 +14,8 @@ variable "root_volume_size" {
   default = 30
 }
 
-variable "public_key_path" {
-  default = "~/.ssh/id_rsa.pub"
+variable "private_key_path" {
+  description = "Location where Terraform stores the generated SSH private key"
+  type        = string
+  default     = "C:/Users/Shree/.ssh/univulner.pem"
 }
