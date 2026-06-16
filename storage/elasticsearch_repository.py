@@ -1,26 +1,18 @@
 import json
-from dataclasses import asdict
+from dataclasses import asdict, is_dataclass
 
 from storage.elasticsearch_client import ElasticsearchClient
 from storage.vulnerability_repo import VulnerabilityRepository
-
-
+from opensearchpy.helpers import bulk
 
 class ElasticsearchRepository(VulnerabilityRepository):
 
     def __init__(self):
-
         self.client = ElasticsearchClient().get_client()
         self.index_name = "vulnerabilities"
 
         if not self.client.indices.exists(index=self.index_name):
-
-            with open(
-                "storage/index_mapping.json",
-                "r",
-                encoding="utf-8"
-            ) as f:
-
+            with open("storage/index_mapping.json", "r", encoding="utf-8") as f:
                 mapping = json.load(f)
 
             self.client.indices.create(
@@ -29,20 +21,29 @@ class ElasticsearchRepository(VulnerabilityRepository):
             )
 
     def upsert(self, record):
+        if is_dataclass(record):
+            document = asdict(record)
+        else:
+            document = record
 
         return self.client.index(
             index=self.index_name,
             id=record.cve_id,
-            document=asdict(record)
+            document=document
         )
 
     def bulk_upsert(self, records):
-
+        actions = []
         for record in records:
-            self.upsert(record)
+            actions.append({
+                "_index": self.index_name,
+                "_id": record.cve_id,
+                "_source": asdict(record)
+            })
+
+        bulk(self.client, actions)
 
     def get(self, cve_id):
-
         try:
             result = self.client.get(
                 index=self.index_name,
@@ -55,7 +56,6 @@ class ElasticsearchRepository(VulnerabilityRepository):
             return None
 
     def delete(self, cve_id):
-
         try:
             self.client.delete(
                 index=self.index_name,
@@ -65,7 +65,6 @@ class ElasticsearchRepository(VulnerabilityRepository):
             pass
 
     def search(self, keyword):
-
         query = {
             "query": {
                 "multi_match": {
@@ -88,7 +87,6 @@ class ElasticsearchRepository(VulnerabilityRepository):
         )
     
     def get_all(self):
-
         query = {
             "query": {
                 "match_all": {}
@@ -104,7 +102,14 @@ class ElasticsearchRepository(VulnerabilityRepository):
         return result["hits"]["hits"]
 
     def count(self):
-
-        return self.client.count(
-            index=self.index_name
-        )["count"]
+        return self.client.count(index=self.index_name)["count"]
+    
+    def update_fields(self, cve_id, updates):
+        
+        self.client.update(
+            index=self.index_name,
+            id=cve_id,
+            body={
+                "doc": updates
+            }
+        )

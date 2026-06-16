@@ -22,9 +22,9 @@ class FailedQueue:
         except Exception:
             return []
 
-    def add(self, cve, error):
+    def add(self, cve, source, error):
         failed = self._load()
-        failed.append({"cve": cve, "error": str(error)})
+        failed.append({"cve": cve, "source": source, "error": str(error)})
 
         with open(FAILED_FILE, "w", encoding="utf-8") as f:
             json.dump(failed, f, indent=4)
