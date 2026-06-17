@@ -4,4 +4,4 @@ if __name__ == "__main__":
 
     loader = InitialLoader()
 
-    loader.run()
+    loader.run(limit=100)
