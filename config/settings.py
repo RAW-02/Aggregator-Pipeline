@@ -31,9 +31,16 @@ LOG_DIR = BASE_DIR / "logs"
 # Loader
 # ============================================
 
-BATCH_SIZE = 300
+BATCH_SIZE = int(os.getenv("BATCH_SIZE", 500))
 
-MAX_WORKERS = 10
+MAX_WORKERS = int(os.getenv("MAX_WORKERS", 10))
+
+INITIAL_LOAD_LIMIT = os.getenv("INITIAL_LOAD_LIMIT")
+
+if INITIAL_LOAD_LIMIT in (None, "", "0"):
+    INITIAL_LOAD_LIMIT = None
+else:
+    INITIAL_LOAD_LIMIT = int(INITIAL_LOAD_LIMIT)
 
 # ============================================
 # API Sleep

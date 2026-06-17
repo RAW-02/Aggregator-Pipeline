@@ -26,7 +26,8 @@ class InitialLoader:
         self.failed_queue = FailedQueue()
         self.checkpoint = CheckpointManager()
 
-    def run(self, limit=100):
+    def run(self, limit=None):
+        success = False
         try:
             checkpoint = self.checkpoint.load()
 
@@ -100,5 +101,8 @@ class InitialLoader:
                     print(f"Rate    : {rate:.2f} CVEs/sec")
                     print()
 
+            success = True
+
         finally:
-            self.bootstrap.cleanup()
+            if success:
+                self.bootstrap.cleanup()
