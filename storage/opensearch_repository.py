@@ -1,6 +1,6 @@
 import json
 from dataclasses import asdict, is_dataclass
-
+import os
 from storage.opensearch_client import OpenSearchClient
 from storage.vulnerability_repo import VulnerabilityRepository
 from opensearchpy.helpers import bulk
@@ -9,7 +9,10 @@ class OpenSearchRepository(VulnerabilityRepository):
 
     def __init__(self):
         self.client = OpenSearchClient().get_client()
-        self.index_name = "vulnerabilities"
+        self.index_name = os.getenv(
+            "OPENSEARCH_INDEX",
+            "vulnerabilities"
+        )
 
         if not self.client.indices.exists(index=self.index_name):
             with open("storage/index_mapping.json", "r", encoding="utf-8") as f:
