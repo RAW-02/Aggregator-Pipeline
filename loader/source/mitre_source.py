@@ -9,6 +9,15 @@ class MITRESource(CVESource):
     def __init__(self, root):
 
         self.root = Path(root)
+        print()
+
+        print("MITRE Source Root:")
+
+        print(self.root)
+
+        print("Exists :", self.root.exists())
+
+        print()
 
     def get_all(self, last_cve=None):
 
@@ -19,7 +28,10 @@ class MITRESource(CVESource):
             self.root.rglob("*.json")
 
         )
+        print(f"Found {len(files)} JSON files")
 
+        files.sort()
+        
         print()
 
         print("Total MITRE Files :", len(files))

@@ -20,18 +20,23 @@ class MITREDownloader:
 
         print()
 
-        print("Downloading MITRE Feed...")
+        print("Downloading from:", self.URL)
+
+        headers = {
+            "User-Agent": "UniVulner-Aggregator/1.0"
+        }
 
         response = requests.get(
 
             self.URL,
-
+            headers=headers,
             stream=True,
-
-            timeout=600
-
+            timeout=600,
+            allow_redirects=True
         )
-
+        
+        print("Status:", response.status_code)
+        
         response.raise_for_status()
 
         with open(self.ZIP, "wb") as file:

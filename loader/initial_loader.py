@@ -18,8 +18,8 @@ class InitialLoader:
     def __init__(self):
         self.bootstrap = MITREBootstrap()
         root = self.bootstrap.prepare()
+        self.source = MITRESource(root)
 
-        self.source = MITRESource()
         self.worker = MitreWorker()
         self.repository = OpenSearchRepository()
         self.stats = LoaderStats()
@@ -101,4 +101,4 @@ class InitialLoader:
                     print()
 
         finally:
-            self.source.cleanup()
+            self.bootstrap.cleanup()
