@@ -3,6 +3,7 @@ from scheduler.enrichment.epss_enrichment import EPSSEnrichmentJob
 from scheduler.enrichment.kev_enrichment import KEVEnrichmentJob
 from scheduler.enrichment.exploitdb_enrichment import ExploitDBEnrichmentJob
 from scheduler.enrichment.github_enrichment import GithubEnrichmentJob
+from config.settings import ENRICHMENT_LIMIT, ENRICHMENT_INTERVAL
 from time import sleep
 
 def main():
@@ -16,13 +17,17 @@ def main():
 
     while True:
         for job in jobs:
-            print(f"Running {job.source}")
+            print()
+            print("=" * 60)
+            print(f"Running {job.source.upper()} Enrichment")
+            print("=" * 60)
+            
             try:
-                job.run(limit=100)
+                job.run(limit=ENRICHMENT_LIMIT)
             except Exception as e:
                 print(e)
 
-        sleep(300)      # every 5 minutes
+        sleep(ENRICHMENT_INTERVAL)      # every 5 minutes
 
 
 if __name__ == "__main__":
