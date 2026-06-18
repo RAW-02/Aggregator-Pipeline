@@ -3,6 +3,7 @@ from scheduler.enrichment.epss_enrichment import EPSSEnrichmentJob
 from scheduler.enrichment.kev_enrichment import KEVEnrichmentJob
 from scheduler.enrichment.exploitdb_enrichment import ExploitDBEnrichmentJob
 from scheduler.enrichment.github_enrichment import GithubEnrichmentJob
+from scheduler.enrichment.threat_score_enrichment import ThreatScoreEnrichmentJob
 from config.settings import ENRICHMENT_LIMIT, ENRICHMENT_INTERVAL
 from time import sleep
 
@@ -12,7 +13,8 @@ def main():
         EPSSEnrichmentJob(),
         KEVEnrichmentJob(),
         ExploitDBEnrichmentJob(),
-        GithubEnrichmentJob()
+        GithubEnrichmentJob(),
+        ThreatScoreEnrichmentJob()
     ]
 
     while True:

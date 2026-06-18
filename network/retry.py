@@ -5,30 +5,26 @@ import requests
 class RetryManager:
 
     @staticmethod
-    def execute(function):
+    def execute(function, retries=5):
+        last_exception = None
 
-        for attempt in range(5):
-
+        for attempt in range(retries):
             try:
-
                 return function()
 
-            except requests.HTTPError as error:
+            except (
+                requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.HTTPError
+            ) as error:
+                last_exception = error
+                wait = 2 ** attempt
 
-                response = error.response
+                print(
+                    f"Retry {attempt + 1}/{retries} "
+                    f"waiting {wait}s"
+                )
 
-                if response is not None and response.status_code == 429:
+                time.sleep(wait)
 
-                    wait = 2 ** attempt
-
-                    print(
-                        f"429 received. Sleeping {wait} seconds..."
-                    )
-
-                    time.sleep(wait)
-
-                    continue
-
-                raise
-
-        return None
+        raise last_exception

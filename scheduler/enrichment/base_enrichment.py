@@ -19,19 +19,19 @@ class BaseEnrichmentJob(ABC):
     def run(self, limit=100):
         records = self.repository.get_pending(self.source, limit)
 
-        print()
         print(f"{self.source.upper()} Pending :", len(records))
-        print()
 
-        updated = 0
-
+        updates = []
         for record in records:
             try:
-                self.enrich_record(record)
-                updated += 1
+                update = self.enrich_record(record)
+                if update:
+                   updates.append(update)
 
             except Exception as e:
                 print(e)
 
+        self.repository.bulk_upsert(updates)
+
         print()
-        print("Updated :", updated)
+        print("Updated :", len(updates))

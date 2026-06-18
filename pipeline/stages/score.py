@@ -1,7 +1,7 @@
-from pipeline.threat_score import ThreatScore
+from pipeline.threat_score import ThreatScoreCalculator
 
 class ThreatScoreStage:
 
     def execute(self, record):
-        record.threat_score = ThreatScore.calculate(record)
+        record.threat_score = ThreatScoreCalculator.calculate(record)
         return record

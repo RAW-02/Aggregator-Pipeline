@@ -1,19 +1,17 @@
-class ThreatScore:
+class ThreatScoreCalculator:
+
     @staticmethod
     def calculate(record):
-        score = 0
+        cvss = min(record.get("cvss_score") or 0, 10) * 5
 
-        score += ((record.cvss_score or 0)/ 10) * 40
+        epss = min(record.get("epss_score") or 0, 1) * 25
 
-        if record.kev_status is True:
-            score += 20
+        kev = 15 if record.get("kev_status") else 0
 
-        score += (record.epss_score or 0) * 20
+        exploit = 5 if record.get("exploit_available") else 0
 
-        if record.exploit_available:
-            score += 10
+        github = (min(record.get("github_repository_count") or 0, 10) / 10) * 5
 
-        if record.github_repository_count > 0:
-            score += 10
+        score = (cvss + epss + kev + exploit + github)
 
-        return round(min(score, 100), 2)
+        return round(score, 2)

@@ -5,6 +5,7 @@ from datetime import datetime, UTC
 from network.http_client import HttpClient
 from network.retry import RetryManager
 from network.rate_limiter import RateLimiter
+import os
 
 class NVDCollector(BaseCollector):
     NVD_BASE_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
@@ -16,7 +17,13 @@ class NVDCollector(BaseCollector):
     def fetch_by_id(self, cve_id):
         self.limiter.wait()
         def request():
-            response = HttpClient.session().get(self.NVD_BASE_URL, params={"cveId": cve_id}, timeout=30)
+            headers = {"User-Agent": "UniVulner"}
+            
+            api_key = os.getenv("NVD_API_KEY")
+            if api_key:
+                headers["apiKey"] = api_key
+            
+            response = HttpClient.session().get(self.NVD_BASE_URL, headers=headers, params={"cveId": cve_id}, timeout=int(os.getenv("NVD_TIMEOUT", 60)))
             response.raise_for_status()
             return response
         
@@ -54,15 +61,19 @@ class NVDCollector(BaseCollector):
         if last_sync is None:
             return []
 
-        response = requests.get(
-            self.NVD_BASE_URL,
-            params={
-                "lastModStartDate": last_sync,
-                "lastModEndDate": datetime.now(UTC).isoformat().replace("+00:00", "Z")
-            }, timeout=30
+        self.limiter.wait()
+
+        params={
+            "lastModStartDate": last_sync,
+            "lastModEndDate": datetime.now(UTC).isoformat().replace("+00:00", "Z")
+        }
+        headers = {"apiKey": os.getenv("NVD_API_KEY"), "User-Agent": "UniVulner"}
+
+        response = RetryManager.execute(
+            lambda:
+            HttpClient.session().get(self.NVD_BASE_URL, headers=headers, params=params, timeout=60)
         )
 
-        response.raise_for_status()
         vulnerabilities = response.json().get("vulnerabilities", [])
 
         cves = []

@@ -207,3 +207,17 @@ class OpenSearchRepository(VulnerabilityRepository):
     
     def get_unprocessed_github(self, limit=50):
         return self.get_pending("github", limit)
+    
+
+    def bulk_update(self, updates):
+        actions = []
+        for update in updates:
+            actions.append({
+                "_op_type": "update",
+                "_index": self.index_name,
+                "_id": update["cve_id"],
+                "doc": update["fields"]
+            })
+
+        if actions:
+            bulk(self.client, actions, refresh=False)
