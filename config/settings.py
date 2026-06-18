@@ -17,7 +17,7 @@ LOG_DIR = BASE_DIR / "logs"
 # Loader
 
 BATCH_SIZE = int(os.getenv("BATCH_SIZE", 500))
-MAX_WORKERS = int(os.getenv("MAX_WORKERS", 10))
+MAX_WORKERS = int(os.getenv("MAX_WORKERS", 15))
 INITIAL_LOAD_LIMIT = os.getenv("INITIAL_LOAD_LIMIT")
 
 if INITIAL_LOAD_LIMIT in (None, "", "0"):
@@ -32,8 +32,8 @@ KEV_DELAY = 0.2
 
 EXPLOITDB_DELAY = 0.5
 
-ENRICHMENT_LIMIT = int(os.getenv("ENRICHMENT_LIMIT", 100))
-ENRICHMENT_INTERVAL = int(os.getenv("ENRICHMENT_INTERVAL", 300))
+ENRICHMENT_LIMIT = int(os.getenv("ENRICHMENT_LIMIT", 200))
+ENRICHMENT_INTERVAL = int(os.getenv("ENRICHMENT_INTERVAL", 90))
 
 NVD_API_KEY = os.getenv("NVD_API_KEY")
 NVD_TIMEOUT = int(os.getenv("NVD_TIMEOUT", 60))

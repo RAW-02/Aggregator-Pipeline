@@ -5,7 +5,7 @@ import requests
 class RetryManager:
 
     @staticmethod
-    def execute(function, retries=5):
+    def execute(function, retries=2):
         last_exception = None
 
         for attempt in range(retries):

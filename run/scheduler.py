@@ -25,11 +25,16 @@ def main():
             print("=" * 60)
             
             try:
-                job.run(limit=ENRICHMENT_LIMIT)
+                updated = job.run(limit=ENRICHMENT_LIMIT)
+                
+                if updated == 0:
+                    print(f"Processed {job.source.upper()} Completed")
+                    break
+
             except Exception as e:
                 print(e)
 
-        sleep(ENRICHMENT_INTERVAL)      # every 5 minutes
+        sleep(ENRICHMENT_INTERVAL)
 
 
 if __name__ == "__main__":
