@@ -180,30 +180,27 @@ class OpenSearchRepository(VulnerabilityRepository):
 
         return cves
     
-    def get_pending(self, field, limit=100):
-        query = {
-            "size": limit,
+    def get_pending(self, source, limit=100):
+        processed_field = f"{source}_processed"
+
+        query = {"size": limit, "sort": [{
+                    "published_date": {
+                        "order": "desc",
+                        "unmapped_type": "date"
+                    }
+                }
+            ],
+
             "query": {
                 "bool": {
-                    "must_not": {
-                        "term": {
-                            field: True
-                        }
-                    }
+                    "must_not": [{"term": {processed_field: True}}]
                 }
             }
         }
 
-        result = self.client.search(
-            index=self.index_name,
-            body=query
-        )
+        result = self.client.search(index=self.index_name, body=query)
 
-        records = []
-        for hit in result["hits"]["hits"]:
-            records.append(hit["_source"])
-
-        return records
+        return [hit["_source"] for hit in result["hits"]["hits"]]
     
     def get_unprocessed_github(self, limit=50):
         return self.get_pending("github", limit)
