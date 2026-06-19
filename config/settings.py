@@ -7,7 +7,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Database
 DATABASE_DIR = BASE_DIR / "database"
 VULNERABILITY_DIR = DATABASE_DIR / "vulnerabilities"
-INDEX_DIR = DATABASE_DIR / "index"
 CHECKPOINT_FILE = DATABASE_DIR / "checkpoint.json"
 FAILED_QUEUE_FILE = DATABASE_DIR / "failed_cves.json"
 

@@ -3,7 +3,6 @@ from storage.opensearch_repository import OpenSearchRepository
 
 
 class BaseEnrichmentJob(ABC):
-
     def __init__(self):
         self.repository = OpenSearchRepository()
 
@@ -31,7 +30,7 @@ class BaseEnrichmentJob(ABC):
             except Exception as e:
                 print(e)
 
-        self.repository.bulk_upsert(updates)
+        self.repository.bulk_update(updates)
 
         print()
         print("Updated :", len(updates))

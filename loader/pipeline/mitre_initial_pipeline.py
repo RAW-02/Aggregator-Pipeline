@@ -18,8 +18,6 @@ class MitreInitialPipeline:
         record.last_modified = mitre["last_modified"]
         record.references = mitre["references"]
 
-        # initialize enrichment flags
-
         record.nvd_processed = False
         record.epss_processed = False
         record.kev_processed = False

@@ -24,7 +24,7 @@ class PipelineRunner:
         return self.refresh_pipeline.run(cve)
 
     def refresh_batch(self, cves):
-        print("Batch Refreshing working, stay on the console ....")
+        print("Batch Refreshing working ....")
         with ThreadPoolExecutor(max_workers=5) as executor:
             results = list(executor.map(self.refresh, cves))
             successful = []

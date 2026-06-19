@@ -1,4 +1,3 @@
-import requests
 from collectors.base_collector import BaseCollector
 from normalizer.nvd_normalizer import NVDDataNormalizer
 from datetime import datetime, UTC

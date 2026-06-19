@@ -13,8 +13,6 @@ class MITRECollector(BaseCollector):
     def validate_cve(cve_id):
         return bool(re.match(CVE_PATTERN, cve_id))
 
-    # ----------------------------------------------------------------------------------------------------
-    # Implementation after BaseCollector
     def fetch_by_id(self, cve_id):
         if not self.validate_cve(cve_id):
             raise ValueError("Invalid CVE format")
