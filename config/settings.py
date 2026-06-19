@@ -4,6 +4,8 @@ import os
 # Base
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"  # noqa: E501
+
 # Database
 DATABASE_DIR = BASE_DIR / "database"
 VULNERABILITY_DIR = DATABASE_DIR / "vulnerabilities"

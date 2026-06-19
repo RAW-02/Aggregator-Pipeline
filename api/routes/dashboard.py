@@ -1,10 +1,7 @@
 from fastapi import APIRouter
 from storage.search_service import SearchService
 
-router = APIRouter(
-    prefix="/dashboard",
-    tags=["Dashboard"]
-)
+router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
 search_service = SearchService()
 
@@ -20,17 +17,9 @@ def severity_distribution():
 
     result = search_service.severity_distribution()
 
-    buckets = (
-        result["aggregations"]
-        ["severity_counts"]
-        ["buckets"]
-    )
+    buckets = result["aggregations"]["severity_counts"]["buckets"]
 
-    return {
-        bucket["key"]: bucket["doc_count"]
-        for bucket in buckets
-    }
-
+    return {bucket["key"]: bucket["doc_count"] for bucket in buckets}
 
 
 @router.get("/top-products")
@@ -38,21 +27,11 @@ def top_products():
 
     result = search_service.top_products()
 
-    buckets = (
-        result["aggregations"]
-        ["top_products"]
-        ["buckets"]
-    )
+    buckets = result["aggregations"]["top_products"]["buckets"]
 
     return [
-        {
-            "product": bucket["key"],
-            "count": bucket["doc_count"]
-        }
-        for bucket in buckets
+        {"product": bucket["key"], "count": bucket["doc_count"]} for bucket in buckets
     ]
-
-
 
 
 @router.get("/top-cwes")
@@ -60,21 +39,9 @@ def top_cwes():
 
     result = search_service.top_cwes()
 
-    buckets = (
-        result["aggregations"]
-        ["top_cwes"]
-        ["buckets"]
-    )
+    buckets = result["aggregations"]["top_cwes"]["buckets"]
 
-    return [
-        {
-            "cwe": bucket["key"],
-            "count": bucket["doc_count"]
-        }
-        for bucket in buckets
-    ]
-
-
+    return [{"cwe": bucket["key"], "count": bucket["doc_count"]} for bucket in buckets]
 
 
 @router.get("/top-threats")
@@ -85,10 +52,7 @@ def top_threats():
     return [
         {
             "cve_id": hit["_source"]["cve_id"],
-            "threat_score": hit["_source"].get(
-                "threat_score",
-                0
-            )
+            "threat_score": hit["_source"].get("threat_score", 0),
         }
         for hit in result["hits"]["hits"]
     ]
@@ -102,12 +66,8 @@ def recent_cves():
     return [
         {
             "cve_id": hit["_source"]["cve_id"],
-            "published_date": hit["_source"].get(
-                "published_date"
-            ),
-            "severity": hit["_source"].get(
-                "severity"
-            )
+            "published_date": hit["_source"].get("published_date"),
+            "severity": hit["_source"].get("severity"),
         }
         for hit in result["hits"]["hits"]
     ]

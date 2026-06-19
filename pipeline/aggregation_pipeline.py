@@ -4,6 +4,7 @@ from pipeline.stages.score import ThreatScoreStage
 from pipeline.stages.validate import ValidationStage
 from pipeline.stages.store import StorageStage
 
+
 class AggregationPipeline:
 
     def __init__(self):
@@ -19,6 +20,6 @@ class AggregationPipeline:
         record = self.score.execute(record)
         record = self.validate.execute(record)
         self.store.execute(record)
-        
+
         print(f"✓ Stored {record.cve_id}")
         return record

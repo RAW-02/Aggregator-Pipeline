@@ -3,6 +3,7 @@ from pathlib import Path
 
 from loader.source.cve_source import CVESource
 
+
 class MITRESource(CVESource):
     def __init__(self, root):
         self.root = Path(root)
@@ -14,14 +15,12 @@ class MITRESource(CVESource):
     def get_all(self, last_cve=None):
         resume = last_cve is None
 
-        files = sorted(
-            self.root.rglob("*.json")
-        )
+        files = sorted(self.root.rglob("*.json"))
 
         print(f"Found {len(files)} JSON files")
 
         files.sort()
-        
+
         print("Total MITRE Files :", len(files))
 
         for index, file in enumerate(files):

@@ -16,8 +16,5 @@ class EPSSEnrichmentJob(BaseEnrichmentJob):
 
         return {
             "cve_id": record["cve_id"],
-            "fields": {
-                "epss_score": score,
-                "epss_processed": True
-            }
+            "fields": {"epss_score": score, "epss_processed": True},
         }

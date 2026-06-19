@@ -25,7 +25,7 @@ class BaseEnrichmentJob(ABC):
             try:
                 update = self.enrich_record(record)
                 if update:
-                   updates.append(update)
+                    updates.append(update)
 
             except Exception as e:
                 print(e)

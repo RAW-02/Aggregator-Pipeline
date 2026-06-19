@@ -22,21 +22,14 @@ class MITREDownloader:
 
         print("Downloading from:", self.URL)
 
-        headers = {
-            "User-Agent": "UniVulner-Aggregator/1.0"
-        }
+        headers = {"User-Agent": "UniVulner-Aggregator/1.0"}
 
         response = requests.get(
-
-            self.URL,
-            headers=headers,
-            stream=True,
-            timeout=600,
-            allow_redirects=True
+            self.URL, headers=headers, stream=True, timeout=600, allow_redirects=True
         )
-        
+
         print("Status:", response.status_code)
-        
+
         response.raise_for_status()
 
         with open(self.ZIP, "wb") as file:
@@ -69,10 +62,4 @@ class MITREDownloader:
 
         print("Cleaning Temporary Files...")
 
-        shutil.rmtree(
-
-            self.ROOT,
-
-            ignore_errors=True
-
-        )
+        shutil.rmtree(self.ROOT, ignore_errors=True)

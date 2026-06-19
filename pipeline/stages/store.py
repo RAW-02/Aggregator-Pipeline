@@ -1,5 +1,6 @@
 from storage.opensearch_repository import OpenSearchRepository
 
+
 class StorageStage:
 
     def __init__(self):

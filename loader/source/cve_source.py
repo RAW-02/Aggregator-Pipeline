@@ -1,5 +1,6 @@
 from typing import Iterator
 
+
 class CVESource:
 
     def get_all(self) -> Iterator[str]:

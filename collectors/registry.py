@@ -4,6 +4,7 @@ from collectors.kve_collector import KEVCollector
 from collectors.mitre_collector import MITRECollector
 from collectors.nvd_collector import NVDCollector
 
+
 class CollectorRegistry:
     def __init__(self):
         self.collectors = {
@@ -11,7 +12,7 @@ class CollectorRegistry:
             "nvd": NVDCollector(),
             "kev": KEVCollector(),
             "epss": EPSSCollector(),
-            "exploitdb": ExploitDBCollector()
+            "exploitdb": ExploitDBCollector(),
         }
 
     def get(self, name):

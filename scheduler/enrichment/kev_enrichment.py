@@ -17,8 +17,5 @@ class KEVEnrichmentJob(BaseEnrichmentJob):
 
         return {
             "cve_id": record["cve_id"],
-            "fields": {
-                "kev_status": status,
-                "kev_processed": True
-            }
+            "fields": {"kev_status": status, "kev_processed": True},
         }

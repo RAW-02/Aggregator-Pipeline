@@ -2,6 +2,7 @@ from pipeline.aggregation_pipeline import AggregationPipeline
 from pipeline.refresh_pipeline import RefreshPipeline
 from concurrent.futures import ThreadPoolExecutor
 
+
 class PipelineRunner:
     def __init__(self):
         self.pipeline = AggregationPipeline()

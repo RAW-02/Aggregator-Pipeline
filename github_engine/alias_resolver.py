@@ -9,7 +9,7 @@ class AliasResolver:
             return {
                 "found": True,
                 "cve": self.alias_db[query]["cve"],
-                "confidence": self.alias_db[query]["confidence"]
+                "confidence": self.alias_db[query]["confidence"],
             }
 
         return {"found": False}

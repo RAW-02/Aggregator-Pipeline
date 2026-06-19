@@ -1,21 +1,13 @@
 class RepoInfo:
 
-    def __init__(
-        self,
-        repo_name,
-        description,
-        stars,
-        forks,
-        updated_at,
-        url
-    ):
+    def __init__(self, repo_name, description, stars, forks, updated_at, url):
         self.repo_name = repo_name
         self.description = description or ""
         self.stars = stars
         self.forks = forks
         self.updated_at = updated_at
         self.url = url
-        
+
         self.detected_cves = []
         self.cve_match = False
 
@@ -35,7 +27,6 @@ class RepoInfo:
             f"README Score: {self.readme_score}\n"
             f"Relevance Score: {self.relevance_score}\n"
         )
-    
 
     def to_dict(self):
         return {
@@ -44,5 +35,5 @@ class RepoInfo:
             # "forks": self.forks,
             # "url": self.url,
             "detected_cves": self.detected_cves,
-            "cve_match": self.cve_match
+            "cve_match": self.cve_match,
         }

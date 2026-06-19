@@ -1,5 +1,6 @@
 from pipeline.threat_score import ThreatScoreCalculator
 
+
 class ThreatScoreStage:
 
     def execute(self, record):

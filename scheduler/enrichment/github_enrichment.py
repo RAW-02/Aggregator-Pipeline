@@ -9,7 +9,11 @@ class GithubEnrichmentJob(BaseEnrichmentJob):
     def enrich_record(self, record):
         print("GITHUB :", record["cve_id"])
 
-        if (record.get("kev_status") or (record.get("cvss_score") or 0) >= 8 or (record.get("epss_score") or 0) >= 0.5):
+        if (
+            record.get("kev_status")
+            or (record.get("cvss_score") or 0) >= 8
+            or (record.get("epss_score") or 0) >= 0.5
+        ):
             github = github_engine(record["cve_id"])
         else:
             github = {
@@ -18,7 +22,7 @@ class GithubEnrichmentJob(BaseEnrichmentJob):
                 "related_cves": [],
                 "top_pocs": [],
                 "top_scanners": [],
-                "top_exploits": []
+                "top_exploits": [],
             }
 
         return {
@@ -30,6 +34,6 @@ class GithubEnrichmentJob(BaseEnrichmentJob):
                 "github_top_pocs": github["top_pocs"],
                 "github_top_scanners": github["top_scanners"],
                 "github_top_exploits": github["top_exploits"],
-                "github_processed": True
-            }
+                "github_processed": True,
+            },
         }

@@ -15,15 +15,12 @@ class RetryManager:
             except (
                 requests.exceptions.Timeout,
                 requests.exceptions.ConnectionError,
-                requests.exceptions.HTTPError
+                requests.exceptions.HTTPError,
             ) as error:
                 last_exception = error
-                wait = 2 ** attempt
+                wait = 2**attempt
 
-                print(
-                    f"Retry {attempt + 1}/{retries} "
-                    f"waiting {wait}s"
-                )
+                print(f"Retry {attempt + 1}/{retries} " f"waiting {wait}s")
 
                 time.sleep(wait)
 

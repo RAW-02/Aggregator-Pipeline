@@ -12,6 +12,6 @@ class ThreatScoreCalculator:
 
         github = (min(record.get("github_repository_count") or 0, 10) / 10) * 5
 
-        score = (cvss + epss + kev + exploit + github)
+        score = cvss + epss + kev + exploit + github
 
         return round(score, 2)

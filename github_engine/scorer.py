@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 
 BAD_TERMS = ["awesome", "list", "collection"]
 
+
 def calculate_score(repo):
     score = 0
     if repo.cve_match:
@@ -15,7 +16,7 @@ def calculate_score(repo):
 
     elif repo.repo_type == "Exploit":
         score += 35
-    
+
     elif repo.repo_type == "Scanner":
         score += 15
 
@@ -34,6 +35,7 @@ def calculate_score(repo):
     score += min(repo.readme_score * 5, 25)
 
     return score
+
 
 def recent_update_score(updated_at):
     updated = datetime.strptime(updated_at, "%Y-%m-%dT%H:%M:%SZ")

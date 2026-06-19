@@ -1,7 +1,7 @@
 from collectors.base_collector import BaseCollector
 import requests
+from config.settings import KEV_URL
 
-KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
 
 class KEVCollector(BaseCollector):
     def __init__(self):
@@ -28,7 +28,7 @@ class KEVCollector(BaseCollector):
 
     def is_known_exploited(self, cve):
         return self.fetch_by_id(cve)["kev_status"]
-    
+
     def fetch_incremental(self, last_sync):
         # Future implementation
         return []

@@ -5,12 +5,12 @@ from github_engine.readme_analyzer import analyze_readme, classify_repo
 from github_engine.scorer import calculate_score
 from github_engine.ranker import rank_repositories
 from github_engine.alias_builder import AliasBuilder
-from github_engine.alias_resolver import AliasResolver
 from github_engine.search_query_generator import generate_search_queries
 from github_engine.deduplication_engine import deduplicate_repositories
 from github_engine.query_classifier import classify_query
 from github_engine.correlation_engine import CorrelationEngine
 import json
+
 
 def github_engine(user_query, debug=False):
     collector = GitHubCollector()
@@ -45,7 +45,7 @@ def github_engine(user_query, debug=False):
 
     engine = CorrelationEngine(repos, aliases, user_query)
     record = engine.build_record()
-    
+
     if debug:
         print(json.dumps(record, indent=4))
 

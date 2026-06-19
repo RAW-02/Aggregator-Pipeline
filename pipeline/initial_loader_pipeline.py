@@ -1,5 +1,6 @@
 from pipeline.vulnerability_aggregator import VulnerabilityAggregator
 
+
 class InitialLoadPipeline:
     def __init__(self):
         self.aggregator = VulnerabilityAggregator()

@@ -4,6 +4,7 @@ from github_scheduler.github_runner import GithubRunner
 repository = OpenSearchRepository()
 runner = GithubRunner()
 
+
 def github_sync():
     records = repository.get_unprocessed_github()
     records = records[:100]

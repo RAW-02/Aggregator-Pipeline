@@ -7,8 +7,10 @@ runner = PipelineRunner()
 sync = SyncManager()
 registry = CollectorRegistry()
 
+
 def initial_load(cves):
     runner.process_batch(cves)
+
 
 def refresh_source(source):
     last_sync = sync.get_last_sync(source)
@@ -52,7 +54,7 @@ def refresh_all_sources():
 def enrichment_sync():
     repository = OpenSearchRepository()
     cves = repository.get_all_cve_ids()
-    
+
     print(f"Refreshing {len(cves)} stored CVEs")
     runner.refresh_batch(cves)
     sync.update_last_sync("enrichment")

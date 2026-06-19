@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from github_scheduler.github_worker import GithubWorker
 
+
 class GithubRunner:
     def __init__(self):
         self.worker = GithubWorker()

@@ -1,5 +1,6 @@
 from loader.pipeline.mitre_initial_pipeline import MitreInitialPipeline
 
+
 class MitreWorker:
     def __init__(self):
         self.pipeline = MitreInitialPipeline()

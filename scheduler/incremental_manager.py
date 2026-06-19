@@ -1,6 +1,7 @@
 from collectors.registry import CollectorRegistry
 from scheduler.sync_manager import SyncManager
 
+
 class IncrementalManager:
     def __init__(self):
         self.registry = CollectorRegistry()

@@ -1,6 +1,7 @@
 from collectors.nvd_collector import NVDCollector
 from storage.opensearch_repository import OpenSearchRepository
 
+
 class NVDEnrichmentPipeline:
     def __init__(self):
         self.nvd = NVDCollector()
@@ -17,7 +18,7 @@ class NVDEnrichmentPipeline:
                 "severity": nvd["severity"],
                 "cwe": nvd["cwe"],
                 "products": nvd["products"],
-                "nvd_processed": True
+                "nvd_processed": True,
             }
 
             self.repository.update_fields(cve, updates)

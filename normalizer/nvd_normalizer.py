@@ -1,5 +1,6 @@
 from schemas.vulnerability import NVD_Model
 
+
 class NVDDataNormalizer:
 
     @staticmethod
@@ -10,7 +11,9 @@ class NVDDataNormalizer:
 
             metric = metrics[version][0]
             score = metric.get("cvssData", {}).get("baseScore", 0.0)
-            severity = metric.get("baseSeverity") or metric.get("cvssData", {}).get("baseSeverity", "UNKNOWN")
+            severity = metric.get("baseSeverity") or metric.get("cvssData", {}).get(
+                "baseSeverity", "UNKNOWN"
+            )
 
             return score, severity
 
@@ -20,10 +23,10 @@ class NVDDataNormalizer:
     def extract_cwe(weaknesses):
         cwe_list = []
         for weakness in weaknesses:
-            for desc in weakness.get("description",[]):
+            for desc in weakness.get("description", []):
                 value = desc.get("value", "")
 
-                if (value and value != "NVD-CWE-noinfo"):
+                if value and value != "NVD-CWE-noinfo":
                     cwe_list.append(value)
 
         return sorted(set(cwe_list))
@@ -50,8 +53,8 @@ class NVDDataNormalizer:
         score, severity = self.extract_cvss(cve.get("metrics", {}))
 
         return NVD_Model(
-            cvss_score = score,
-            severity = severity,
-            cwe = self.extract_cwe(cve.get("weaknesses", [])),
-            affected_products = self.extract_products(cve.get("configurations", []))
+            cvss_score=score,
+            severity=severity,
+            cwe=self.extract_cwe(cve.get("weaknesses", [])),
+            affected_products=self.extract_products(cve.get("configurations", [])),
         )

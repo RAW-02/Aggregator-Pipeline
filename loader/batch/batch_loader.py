@@ -1,5 +1,6 @@
 from itertools import islice
 
+
 class BatchLoader:
     @staticmethod
     def batches(iterator, batch_size):

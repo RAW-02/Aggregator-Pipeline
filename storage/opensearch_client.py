@@ -4,6 +4,7 @@ import os
 
 load_dotenv()
 
+
 class OpenSearchClient:
 
     def __init__(self):
@@ -11,12 +12,12 @@ class OpenSearchClient:
             hosts=[
                 {
                     "host": os.getenv("OPENSEARCH_HOST", "opensearch"),
-                    "port": int(os.getenv("OPENSEARCH_PORT", 9200))
+                    "port": int(os.getenv("OPENSEARCH_PORT", 9200)),
                 }
             ],
             use_ssl=False,
             verify_certs=False,
-            http_compress=True
+            http_compress=True,
         )
 
     def get_client(self):

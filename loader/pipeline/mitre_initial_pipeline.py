@@ -1,6 +1,7 @@
 from collectors.mitre_collector import MITRECollector
 from schemas.vulnerability import VulnerabilityRecord
 
+
 class MitreInitialPipeline:
 
     def __init__(self):

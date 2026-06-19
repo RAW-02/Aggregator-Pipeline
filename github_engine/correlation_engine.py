@@ -1,5 +1,6 @@
 from collections import Counter
 
+
 class CorrelationEngine:
     def __init__(self, repos, aliases, primary_cve):
         self.repos = repos
@@ -22,7 +23,7 @@ class CorrelationEngine:
     def get_aliases(self):
         aliases = []
         for alias, data in self.aliases.items():
-            if (data["cve"] == self.primary_cve):
+            if data["cve"] == self.primary_cve:
                 aliases.append(alias)
 
         return aliases
@@ -42,7 +43,7 @@ class CorrelationEngine:
             if repo.repo_type == "Scanner":
                 scanners.append(repo)
 
-        scanners.sort(key=lambda x:x.relevance_score,reverse=True)
+        scanners.sort(key=lambda x: x.relevance_score, reverse=True)
         return scanners[:3]
 
     def get_top_exploits(self):
@@ -63,22 +64,31 @@ class CorrelationEngine:
             "repository_count": self.repository_count(),
             "aliases": self.get_aliases(),
             "related_cves": self.get_related_cves(),
-            "top_pocs": [{
+            "top_pocs": [
+                {
                     "name": repo.repo_name,
                     "url": repo.url,
                     "stars": repo.stars,
-                    "score": repo.relevance_score
-                } for repo in self.get_top_pocs()],
-            "top_scanners": [{
+                    "score": repo.relevance_score,
+                }
+                for repo in self.get_top_pocs()
+            ],
+            "top_scanners": [
+                {
                     "name": repo.repo_name,
                     "url": repo.url,
                     "stars": repo.stars,
-                    "score": repo.relevance_score
-                } for repo in self.get_top_scanners()],
-            "top_exploits": [{
+                    "score": repo.relevance_score,
+                }
+                for repo in self.get_top_scanners()
+            ],
+            "top_exploits": [
+                {
                     "name": repo.repo_name,
                     "url": repo.url,
                     "stars": repo.stars,
-                    "score": repo.relevance_score
-                } for repo in self.get_top_exploits()],
-    }
+                    "score": repo.relevance_score,
+                }
+                for repo in self.get_top_exploits()
+            ],
+        }

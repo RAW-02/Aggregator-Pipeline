@@ -5,6 +5,7 @@ from collectors.base_collector import BaseCollector
 MITRE_API_URL = "https://cveawg.mitre.org/api/cve/"
 CVE_PATTERN = r"^CVE-\d{4}-\d+$"
 
+
 class MITRECollector(BaseCollector):
     def __init__(self, timeout=15):
         self.timeout = timeout
@@ -23,7 +24,7 @@ class MITRECollector(BaseCollector):
         return self.normalize(response.json())
 
     def normalize(self, raw_data):
-        metadata = raw_data.get("cveMetadata",{})
+        metadata = raw_data.get("cveMetadata", {})
         cna = raw_data.get("containers", {}).get("cna", {})
         descriptions = cna.get("descriptions", [])
 
@@ -31,14 +32,16 @@ class MITRECollector(BaseCollector):
         if descriptions:
             description = descriptions[0].get("value", "")
 
-        references = [ref.get("url") for ref in cna.get("references", []) if ref.get("url")][:3]
+        references = [
+            ref.get("url") for ref in cna.get("references", []) if ref.get("url")
+        ][:3]
 
         return {
             "cve_id": metadata.get("cveId"),
             "description": description,
             "published_date": metadata.get("datePublished").split("T")[0],
             "last_modified": metadata.get("dateUpdated").split("T")[0],
-            "references": references
+            "references": references,
         }
 
     def fetch_incremental(self, last_sync):

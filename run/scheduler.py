@@ -7,6 +7,7 @@ from scheduler.enrichment.threat_score_enrichment import ThreatScoreEnrichmentJo
 from config.settings import ENRICHMENT_LIMIT, ENRICHMENT_INTERVAL
 from time import sleep
 
+
 def main():
     jobs = [
         NVDEnrichmentJob(),
@@ -14,7 +15,7 @@ def main():
         KEVEnrichmentJob(),
         ExploitDBEnrichmentJob(),
         GithubEnrichmentJob(),
-        ThreatScoreEnrichmentJob()
+        ThreatScoreEnrichmentJob(),
     ]
 
     while True:
@@ -23,7 +24,7 @@ def main():
             print("=" * 60)
             print(f"Running {job.source.upper()} Enrichment")
             print("=" * 60)
-            
+
             try:
                 job.run(limit=ENRICHMENT_LIMIT)
 
@@ -31,6 +32,7 @@ def main():
                 print(e)
 
         sleep(ENRICHMENT_INTERVAL)
+
 
 if __name__ == "__main__":
     main()

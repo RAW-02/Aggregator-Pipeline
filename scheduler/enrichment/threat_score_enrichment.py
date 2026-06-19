@@ -8,14 +8,10 @@ class ThreatScoreEnrichmentJob(BaseEnrichmentJob):
 
     def enrich_record(self, record):
         print("THREAT :", record["cve_id"])
-        
+
         score = ThreatScoreCalculator.calculate(record)
 
         return {
             "cve_id": record["cve_id"],
-
-            "fields": {
-                "threat_score": score,
-                "threat_processed": True
-            }
+            "fields": {"threat_score": score, "threat_processed": True},
         }

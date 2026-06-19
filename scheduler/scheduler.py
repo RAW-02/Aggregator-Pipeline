@@ -1,6 +1,6 @@
 import time
 import schedule
-from scheduler.jobs import (refresh_all_sources, enrichment_sync)
+from scheduler.jobs import refresh_all_sources, enrichment_sync
 
 # Every 6 hours
 schedule.every(6).hours.do(refresh_all_sources)
@@ -14,5 +14,5 @@ while True:
     try:
         schedule.run_pending()
     except Exception as e:
-        print(e)    
+        print(e)
     time.sleep(30)

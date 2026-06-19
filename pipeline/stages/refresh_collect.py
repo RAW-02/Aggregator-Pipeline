@@ -49,7 +49,4 @@ class RefreshCollectStage:
         record.github_top_scanners = github["top_scanners"]
         record.github_top_exploits = github["top_exploits"]
 
-        return {
-            "status": "refresh",
-            "record": record
-        }
+        return {"status": "refresh", "record": record}

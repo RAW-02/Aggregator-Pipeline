@@ -1,6 +1,19 @@
 import re
 
-CATEGORY_KEYWORDS = {"rce", "remote code execution", "xss", "sql injection", "privilege escalation", "csrf", "ssrf", "directory traversal", "lfi", "rfi", "injection"}
+CATEGORY_KEYWORDS = {
+    "rce",
+    "remote code execution",
+    "xss",
+    "sql injection",
+    "privilege escalation",
+    "csrf",
+    "ssrf",
+    "directory traversal",
+    "lfi",
+    "rfi",
+    "injection",
+}
+
 
 def classify_query(query):
     query = query.strip()

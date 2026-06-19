@@ -4,6 +4,7 @@ import os
 FAILED_DIRECTORY = "database/failed"
 FAILED_FILE = os.path.join(FAILED_DIRECTORY, "failed_cves.json")
 
+
 class FailedQueue:
     def __init__(self):
         os.makedirs(FAILED_DIRECTORY, exist_ok=True)

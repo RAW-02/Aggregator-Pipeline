@@ -14,6 +14,7 @@ from loader.checkpoint.checkpoint_manager import CheckpointManager
 from storage.opensearch_repository import OpenSearchRepository
 from config.settings import BATCH_SIZE, MAX_WORKERS
 
+
 class InitialLoader:
     def __init__(self):
         self.bootstrap = MITREBootstrap()
@@ -32,10 +33,10 @@ class InitialLoader:
             checkpoint = self.checkpoint.load()
 
             iterator = tqdm(
-                self.source.get_all(
-                last_cve=checkpoint["last_cve"]
-                ), 
-                desc="Loading CVEs", unit=" CVE")
+                self.source.get_all(last_cve=checkpoint["last_cve"]),
+                desc="Loading CVEs",
+                unit=" CVE",
+            )
 
             start_time = time.time()
 
@@ -47,7 +48,7 @@ class InitialLoader:
                     records = []
                     batch_success = 0
                     batch_failed = 0
-                
+
                     results = list(executor.map(self.worker.process, batch))
 
                     for mitre_json, result in zip(batch, results):
@@ -60,7 +61,7 @@ class InitialLoader:
                         if record is None:
                             batch_failed += 1
                             continue
-                        
+
                         batch_success += 1
                         records.append(record)
 
@@ -71,10 +72,10 @@ class InitialLoader:
                         continue
 
                     self.repository.bulk_upsert(records)
-                    
+
                     self.checkpoint.save(
                         processed=self.stats.processed + batch_success,
-                        last_cve=records[-1].cve_id
+                        last_cve=records[-1].cve_id,
                     )
 
                     # Update statistics

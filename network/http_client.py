@@ -1,5 +1,6 @@
 import requests
 
+
 class HttpClient:
     _session = None
 
@@ -8,8 +9,8 @@ class HttpClient:
         if cls._session is None:
             cls._session = requests.Session()
 
-            cls._session.headers.update({
-                "User-Agent": "Threat-Intelligence-Platform/1.0"
-            })
+            cls._session.headers.update(
+                {"User-Agent": "Threat-Intelligence-Platform/1.0"}
+            )
 
         return cls._session
