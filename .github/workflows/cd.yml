@@ -21,20 +21,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Login GHCR
+      - name: Login to GHCR
         run: |
           echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io \
           -u "${{ secrets.GHCR_USERNAME }}" \
           --password-stdin
 
-      - name: Build FastAPI
+      - name: Build FastAPI Image
         run: |
           docker build \
           -f Docker/Dockerfile.fastapi \
           -t ghcr.io/${{ secrets.GHCR_USERNAME }}/univulner-fastapi:latest \
           .
 
-      - name: Build Scheduler
+      - name: Build Scheduler Image
         run: |
           docker build \
           -f Docker/Dockerfile.scheduler \
@@ -46,7 +46,7 @@ jobs:
           docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/univulner-fastapi:latest
           docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/univulner-scheduler:latest
 
-      - name: Deploy EC2
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.2.0
 
         with:
@@ -54,11 +54,11 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/ubuntu/univulner
+            cd /home/ubuntu/Aggregator-Pipeline
 
-            docker login ghcr.io \
-              -u ${{ secrets.GHCR_USERNAME }} \
-              -p ${{ secrets.GHCR_TOKEN }}
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io \
+              -u "${{ secrets.GHCR_USERNAME }}" \
+              --password-stdin
 
             docker compose pull
 

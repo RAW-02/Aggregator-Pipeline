@@ -73,7 +73,7 @@ services:
 
 
   fastapi:
-    image: ghcr.io/<GHCR_USERNAME>/univulner-fastapi:latest
+    image: ghcr.io/Atharvalearner/univulner-fastapi:latest
 
     container_name: fastapi
 
@@ -103,7 +103,7 @@ services:
       - vulnerability-network
 
   scheduler:
-    image: ghcr.io/<GHCR_USERNAME>/univulner-scheduler:latest
+    image: ghcr.io/Atharvalearner/univulner-scheduler:latest
 
     container_name: scheduler
 
