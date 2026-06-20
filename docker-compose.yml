@@ -73,7 +73,8 @@ services:
 
 
   fastapi:
-    image: ghcr.io/Atharvalearner/univulner-fastapi:latest
+    image: ghcr.io/raw-02/univulner-fastapi:latest
+    pull_policy: always
 
     container_name: fastapi
 
@@ -103,8 +104,9 @@ services:
       - vulnerability-network
 
   scheduler:
-    image: ghcr.io/Atharvalearner/univulner-scheduler:latest
-
+    image: ghcr.io/raw-02/univulner-scheduler:latest
+    pull_policy: always
+    
     container_name: scheduler
 
     env_file:
