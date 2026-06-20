@@ -73,9 +73,7 @@ services:
 
 
   fastapi:
-    build:
-      context: .
-      dockerfile: Docker/Dockerfile.fastapi
+    image: ghcr.io/<GHCR_USERNAME>/univulner-fastapi:latest
 
     container_name: fastapi
 
@@ -105,9 +103,7 @@ services:
       - vulnerability-network
 
   scheduler:
-    build:
-      context: .
-      dockerfile: Docker/Dockerfile.scheduler
+    image: ghcr.io/<GHCR_USERNAME>/univulner-scheduler:latest
 
     container_name: scheduler
 

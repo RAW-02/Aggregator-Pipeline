@@ -1,0 +1,76 @@
+name: UniVulner CI Pipeline
+
+on:
+  push:
+    branches:
+      - deployment
+
+  pull_request:
+    branches:
+      - deployment
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Check Code Formatting (Black)
+        run: |
+          black . --check
+
+      - name: Run Flake8
+        run: |
+          flake8 .
+
+      - name: Run Pytest
+        run: |
+          pytest
+
+      - name: Run Bandit Security Scan
+        run: |
+          bandit -r api collectors scheduler storage loader pipeline
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format Check
+        working-directory: infrastructure/terraform
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        working-directory: infrastructure/terraform
+        run: |
+          terraform init -backend=false
+          terraform validate
+
+      - name: Build FastAPI Docker Image
+        run: |
+          docker build \
+            -f Docker/Dockerfile.fastapi \
+            -t univulner-fastapi \
+            .
+  
+      - name: Build Scheduler Docker Image
+        run: |
+          docker build \
+            -f Docker/Dockerfile.scheduler \
+            -t univulner-scheduler \
+            .
