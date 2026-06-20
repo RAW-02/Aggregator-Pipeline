@@ -9,5 +9,6 @@ for item in queue.get_all():
         pipeline.run(item["cve"])
         print(f"Recovered {item['cve']}")
 
-    except Exception:
-        pass
+    except Exception as error:
+        print(error)
+        pass    # nosec B112

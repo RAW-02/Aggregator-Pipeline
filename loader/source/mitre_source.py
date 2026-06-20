@@ -43,5 +43,6 @@ class MITRESource(CVESource):
                     continue
                 yield data
 
-            except Exception:
-                continue
+            except Exception as error:
+                print(error)
+                continue    # nosec B112

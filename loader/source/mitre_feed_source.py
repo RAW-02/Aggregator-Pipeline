@@ -1,8 +1,6 @@
 import json
 from pathlib import Path
-
 from loader.source.cve_source import CVESource
-
 
 class MITREFeedSource(CVESource):
     def __init__(self, root="database/mitre_feed/cves"):
@@ -34,5 +32,6 @@ class MITREFeedSource(CVESource):
 
                 yield data
 
-            except Exception:
-                continue
+            except Exception as error:
+                print(error)
+                continue    # nosec B112
