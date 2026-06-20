@@ -11,4 +11,4 @@ for item in queue.get_all():
 
     except Exception as error:
         print(error)
-        pass    # nosec B112
+        pass  # nosec B112

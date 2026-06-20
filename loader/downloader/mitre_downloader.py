@@ -5,6 +5,7 @@ import requests
 import tempfile
 from pathlib import Path
 
+
 class MITREDownloader:
 
     URL = "https://github.com/CVEProject/cvelistV5/archive/refs/heads/main.zip"

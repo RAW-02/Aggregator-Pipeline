@@ -45,4 +45,4 @@ class MITRESource(CVESource):
 
             except Exception as error:
                 print(error)
-                continue    # nosec B112
+                continue  # nosec B112
