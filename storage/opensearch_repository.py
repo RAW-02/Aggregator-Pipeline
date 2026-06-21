@@ -146,7 +146,7 @@ class OpenSearchRepository(VulnerabilityRepository):
 
         query = {
             "size": limit,
-            "sort": [{"published_date": {"order": "desc", "unmapped_type": "date"}}],
+            "sort": [{"published_date": {"order": "asc", "unmapped_type": "date"}}],
             "query": {"bool": {"must_not": [{"term": {processed_field: True}}]}},
         }
 

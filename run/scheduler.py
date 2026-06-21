@@ -10,8 +10,8 @@ from time import sleep
 
 def main():
     jobs = [
-        NVDEnrichmentJob(),
         EPSSEnrichmentJob(),
+        NVDEnrichmentJob(),
         KEVEnrichmentJob(),
         ExploitDBEnrichmentJob(),
         GithubEnrichmentJob(),
