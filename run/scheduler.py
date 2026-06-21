@@ -35,7 +35,7 @@ def main():
                 if updated == 0:
                     print()
                     print(f"{job.source.upper()} COMPLETED")
-                    return
+                    continue
 
             except Exception as e:
                 print(e)
