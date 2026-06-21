@@ -19,7 +19,7 @@ class BaseEnrichmentJob(ABC):
         records = self.repository.get_pending(self.source, limit)
 
         print(f"{self.source.upper()} Pending :", len(records))
-        
+
         if not records:
             return 0
 
