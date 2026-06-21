@@ -1,11 +1,11 @@
 from scheduler.enrichment.nvd_enrichment import NVDEnrichmentJob  # noqa: F401
 from scheduler.enrichment.epss_enrichment import EPSSEnrichmentJob
 from scheduler.enrichment.kev_enrichment import KEVEnrichmentJob  # noqa: F401
-from scheduler.enrichment.exploitdb_enrichment import (
+from scheduler.enrichment.exploitdb_enrichment import (  # noqa: F401, E501
     ExploitDBEnrichmentJob,
 )  # noqa: F401, E501
 from scheduler.enrichment.github_enrichment import GithubEnrichmentJob  # noqa: F401
-from scheduler.enrichment.threat_score_enrichment import (
+from scheduler.enrichment.threat_score_enrichment import (  # noqa: F401, E501
     ThreatScoreEnrichmentJob,
 )  # noqa: F401, E501
 from config.settings import ENRICHMENT_LIMIT, ENRICHMENT_INTERVAL
