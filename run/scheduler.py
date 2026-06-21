@@ -11,11 +11,11 @@ from time import sleep
 def main():
     jobs = [
         EPSSEnrichmentJob(),
-        NVDEnrichmentJob(),
-        KEVEnrichmentJob(),
-        ExploitDBEnrichmentJob(),
-        GithubEnrichmentJob(),
-        ThreatScoreEnrichmentJob(),
+        # NVDEnrichmentJob(),
+        # KEVEnrichmentJob(),
+        # ExploitDBEnrichmentJob(),
+        # GithubEnrichmentJob(),
+        # ThreatScoreEnrichmentJob(),
     ]
 
     while True:
@@ -26,13 +26,17 @@ def main():
             print("=" * 60)
 
             try:
-                job.run(limit=ENRICHMENT_LIMIT)
+                updated = job.run(limit=ENRICHMENT_LIMIT)
 
+                if updated == 0:
+                    print()
+                    print(f"{job.source.upper()} COMPLETED")
+                    return
+                
             except Exception as e:
                 print(e)
 
         sleep(ENRICHMENT_INTERVAL)
-
 
 if __name__ == "__main__":
     main()
