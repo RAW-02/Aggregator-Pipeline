@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from storage.opensearch_repository import OpenSearchRepository
+from concurrent.futures import ThreadPoolExecutor
+from config.settings import THREAD_POOL_SIZE
 
 
 class BaseEnrichmentJob(ABC):
@@ -23,15 +25,10 @@ class BaseEnrichmentJob(ABC):
         if not records:
             return 0
 
-        updates = []
-        for record in records:
-            try:
-                update = self.enrich_record(record)
-                if update:
-                    updates.append(update)
+        with ThreadPoolExecutor(max_workers=THREAD_POOL_SIZE) as executor:
+            results = list(executor.map(self.safe_enrich, records))
 
-            except Exception as e:
-                print(e)
+        updates = [r for r in results if r]
 
         self.repository.bulk_update(updates)
 
@@ -39,3 +36,10 @@ class BaseEnrichmentJob(ABC):
         print("Updated :", len(updates))
 
         return len(updates)
+
+    def safe_enrich(self, record):
+        try:
+            return self.enrich_record(record)
+        except Exception as e:
+            print(e)
+            return None

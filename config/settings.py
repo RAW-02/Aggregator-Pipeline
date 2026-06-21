@@ -26,6 +26,9 @@ if INITIAL_LOAD_LIMIT in (None, "", "0"):
 else:
     INITIAL_LOAD_LIMIT = int(INITIAL_LOAD_LIMIT)
 
+
+THREAD_POOL_SIZE = int(os.getenv("THREAD_POOL_SIZE", 20))
+
 # API Sleep
 EPSS_DELAY = 0.5
 
