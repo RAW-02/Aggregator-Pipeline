@@ -27,7 +27,7 @@ class EPSSDataset:
 
         with gzip.open(self.FILE, "rt", encoding="utf-8") as f:
             next(f)
-            
+
             reader = csv.DictReader(f)
 
             for row in reader:
