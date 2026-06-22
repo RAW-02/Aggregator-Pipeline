@@ -10,6 +10,9 @@ class KEVCollector(BaseCollector):
     def is_known_exploited(self, cve_id):
         return cve_id in self.kev_set
 
+    def fetch_by_id(self, cve_id):
+        return {"kev_status": cve_id in self.kev_set}
+
     def fetch_incremental(self, last_sync):
         # Future implementation
         return []
