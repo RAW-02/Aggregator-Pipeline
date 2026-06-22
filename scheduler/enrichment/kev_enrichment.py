@@ -19,3 +19,6 @@ class KEVEnrichmentJob(BaseEnrichmentJob):
             "cve_id": record["cve_id"],
             "fields": {"kev_status": status, "kev_processed": True},
         }
+    
+    def fetch_by_id(self, cve_id):
+        return self.is_known_exploited(cve_id)
