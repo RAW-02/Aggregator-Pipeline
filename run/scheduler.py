@@ -17,7 +17,7 @@ def main():
         EPSSEnrichmentJob(),
         # NVDEnrichmentJob(),
         KEVEnrichmentJob(),
-        # ExploitDBEnrichmentJob(),
+        ExploitDBEnrichmentJob(),
         # GithubEnrichmentJob(),
         # ThreatScoreEnrichmentJob(),
     ]
