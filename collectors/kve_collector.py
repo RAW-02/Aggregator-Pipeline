@@ -1,33 +1,14 @@
 from collectors.base_collector import BaseCollector
-import requests
-from config.settings import KEV_URL
+from collectors.kev_dataset import KEVDataset
 
 
 class KEVCollector(BaseCollector):
     def __init__(self):
-        self.catalog = None
+        dataset = KEVDataset()
+        self.kev_set = dataset.load()
 
-    def load_catalog(self):
-        if self.catalog:
-            return self.catalog
-
-        response = requests.get(KEV_URL, timeout=30)
-        response.raise_for_status()
-
-        self.catalog = response.json()
-        return self.catalog
-
-    def fetch_by_id(self, cve):
-        catalog = self.load_catalog()
-        vulnerabilities = catalog.get("vulnerabilities", [])
-        for item in vulnerabilities:
-            if item.get("cveID") == cve:
-                return {"kev_status": True}
-
-        return {"kev_status": False}
-
-    def is_known_exploited(self, cve):
-        return self.fetch_by_id(cve)["kev_status"]
+    def is_known_exploited(self, cve_id):
+        return cve_id in self.kev_set
 
     def fetch_incremental(self, last_sync):
         # Future implementation
