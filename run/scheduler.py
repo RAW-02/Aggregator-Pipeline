@@ -16,7 +16,7 @@ def main():
     jobs = [
         EPSSEnrichmentJob(),
         # NVDEnrichmentJob(),
-        KEVEnrichmentJob(),
+        # KEVEnrichmentJob(),
         # ExploitDBEnrichmentJob(),
         # GithubEnrichmentJob(),
         # ThreatScoreEnrichmentJob(),
