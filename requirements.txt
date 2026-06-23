@@ -10,3 +10,6 @@ openpyxl
 
 #build PDF using(for export feature)
 reportlab
+
+
+tqdm
