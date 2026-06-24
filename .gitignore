@@ -1,11 +1,9 @@
 
 exploitdb.csv
 sync_metadata.json
-\database
 # \vulnerabilities
 
 # \sync
-# \database\vulnerabilities
 
 
 # Environment Variables
@@ -15,8 +13,6 @@ sync_metadata.json
 __pycache__/
 *.pyc
 
-# Local Database
-database/
 
 # Elastic Certificates
 *.crt
