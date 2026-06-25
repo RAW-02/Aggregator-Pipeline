@@ -19,8 +19,7 @@ class NVDCollector(BaseCollector):
         result = self.fetch_by_id(cve)
 
         if result is None:
-
-            return {"cvss_score": None, "severity": None, "cwe": [], "products": []}
+            return None
 
         return result
 
