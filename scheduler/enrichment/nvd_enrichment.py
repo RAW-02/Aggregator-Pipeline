@@ -19,7 +19,7 @@ class NVDEnrichmentJob(BaseEnrichmentJob):
         print("NVD :", record["cve_id"])
         result = self.collector.get_nvd_by_cve(record["cve_id"])
 
-        if result["cvss_score"] is None:
+        if result is None:
             return None
 
         return {
