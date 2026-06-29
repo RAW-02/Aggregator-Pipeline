@@ -41,7 +41,7 @@ class MITREFeedSource(CVESource):
                         resume = True
 
                     continue
-                
+
                 print("Yielding:", cve)
                 yield data
 
