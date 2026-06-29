@@ -10,6 +10,7 @@ services:
       - bootstrap.memory_lock=true
       - OPENSEARCH_JAVA_OPTS=-Xms2g -Xmx2g
       - DISABLE_SECURITY_PLUGIN=true
+      - path.repo=/usr/share/opensearch/snapshots
 
     ulimits:
       memlock:
@@ -18,7 +19,8 @@ services:
 
     volumes:
       - opensearch-data:/usr/share/opensearch/data
-
+      - /home/ubuntu/opensearch-snapshots:/usr/share/opensearch/snapshots
+      
     ports:
       - "9200:9200"
       - "9600:9600"
