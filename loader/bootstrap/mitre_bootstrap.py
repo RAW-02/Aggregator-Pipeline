@@ -13,7 +13,6 @@ class MITREBootstrap:
         self.downloader = MITREDownloader()
 
     def prepare(self):
-
         print()
         print("========== MITRE Bootstrap ==========")
         print()
@@ -24,20 +23,21 @@ class MITREBootstrap:
         if not os.path.exists(self.ZIP):
             print("Downloading MITRE ZIP...")
             self.downloader.download()
-
         else:
             print("MITRE ZIP already exists")
 
         if not os.path.exists(self.EXTRACT):
             print("Extracting MITRE ZIP...")
-
             self.downloader.extract()
-
         else:
             print("MITRE already extracted")
 
         print()
         print("Returning Root :", self.EXTRACT)
+
+        print("\nContents of extracted directory:")
+        for item in self.EXTRACT.iterdir():
+            print(" -", item)
 
         return self.EXTRACT
 

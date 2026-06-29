@@ -21,7 +21,18 @@ class MITREFeedSource(CVESource):
                 with open(file, encoding="utf-8") as f:
                     data = json.load(f)
 
-                cve = data.get("cveMetadata", {}).get("cveId")
+                print(type(data))
+                print(file)
+
+                if not isinstance(data, dict):
+                    print(f"Skipping non-dict JSON: {file}")
+                    continue
+
+                metadata = data.get("cveMetadata")
+                if metadata is None:
+                    continue
+
+                cve = metadata.get("cveId")
                 if cve is None:
                     continue
 
@@ -30,7 +41,8 @@ class MITREFeedSource(CVESource):
                         resume = True
 
                     continue
-
+                
+                print("Yielding:", cve)
                 yield data
 
             except Exception as error:

@@ -8,6 +8,7 @@ class MitreInitialPipeline:
         self.mitre = MITRECollector()
 
     def run(self, mitre_json):
+        print(type(mitre_json))
 
         mitre = self.mitre.normalize(mitre_json)
 
