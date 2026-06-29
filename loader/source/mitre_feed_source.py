@@ -25,7 +25,11 @@ class MITREFeedSource(CVESource):
                 print(file)
 
                 if not isinstance(data, dict):
-                    print(f"Skipping non-dict JSON: {file}")
+                    print("\n==============================")
+                    print("Non-dict JSON found:")
+                    print(file)
+                    print(type(data))
+                    print("==============================")
                     continue
 
                 metadata = data.get("cveMetadata")
@@ -46,5 +50,7 @@ class MITREFeedSource(CVESource):
                 yield data
 
             except Exception as error:
+                print("\nERROR FILE:")
+                print(file)
                 print(error)
-                continue  # nosec B112
+                raise

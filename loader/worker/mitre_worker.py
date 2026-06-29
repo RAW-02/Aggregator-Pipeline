@@ -6,6 +6,7 @@ class MitreWorker:
         self.pipeline = MitreInitialPipeline()
 
     def process(self, mitre_json):
+        print(type(mitre_json))
         try:
             return self.pipeline.run(mitre_json), None
 

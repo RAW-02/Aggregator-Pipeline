@@ -106,4 +106,5 @@ class InitialLoader:
 
         finally:
             if success:
-                self.bootstrap.cleanup()
+                print("Cleanup commented for debug")
+                # self.bootstrap.cleanup()

@@ -24,6 +24,7 @@ class MITRECollector(BaseCollector):
         return self.normalize(response.json())
 
     def normalize(self, raw_data):
+        print(type(raw_data))
         metadata = raw_data.get("cveMetadata", {})
         cna = raw_data.get("containers", {}).get("cna", {})
         descriptions = cna.get("descriptions", [])
