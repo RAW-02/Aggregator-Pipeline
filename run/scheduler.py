@@ -1,5 +1,5 @@
 from scheduler.enrichment.nvd_enrichment import NVDEnrichmentJob  # noqa: F401
-from scheduler.enrichment.epss_enrichment import EPSSEnrichmentJob
+from scheduler.enrichment.epss_enrichment import EPSSEnrichmentJob  # noqa: F401
 from scheduler.enrichment.kev_enrichment import KEVEnrichmentJob  # noqa: F401
 from scheduler.enrichment.exploitdb_enrichment import (  # noqa: F401, E501
     ExploitDBEnrichmentJob,
@@ -14,10 +14,10 @@ from time import sleep
 
 def main():
     jobs = [
-        EPSSEnrichmentJob(),
-        # NVDEnrichmentJob(),
-        KEVEnrichmentJob(),
-        ExploitDBEnrichmentJob(),
+        # EPSSEnrichmentJob(),
+        NVDEnrichmentJob(),
+        # KEVEnrichmentJob(),
+        # ExploitDBEnrichmentJob(),
         # GithubEnrichmentJob(),
         # ThreatScoreEnrichmentJob(),
     ]

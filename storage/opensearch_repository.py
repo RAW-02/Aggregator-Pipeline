@@ -171,3 +171,19 @@ class OpenSearchRepository(VulnerabilityRepository):
 
         if actions:
             bulk(self.client, actions, refresh=False)
+
+    def get_pending_nvd(self, limit=100):
+        query = {
+            "size": limit,
+            "sort": [{"published_date": {"order": "asc", "unmapped_type": "date"}}],
+            "query": {
+                "bool": {
+                    "must": [{"range": {"published_date": {"gte": "2010-01-01"}}}],
+                    "must_not": [{"term": {"nvd_processed": True}}],
+                }
+            },
+        }
+
+        result = self.client.search(index=self.index_name, body=query)
+
+        return [hit["_source"] for hit in result["hits"]["hits"]]

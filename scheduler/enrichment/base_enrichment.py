@@ -17,8 +17,11 @@ class BaseEnrichmentJob(ABC):
     def enrich_record(self, record):
         pass
 
+    def get_records(self, limit):
+        return self.repository.get_pending(self.source, limit)
+
     def run(self, limit=100):
-        records = self.repository.get_pending(self.source, limit)
+        records = self.get_records(limit)
 
         print(f"{self.source.upper()} Pending :", len(records))
 

@@ -1,8 +1,10 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Base
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"  # noqa: E501
 
@@ -28,6 +30,7 @@ else:
 
 
 THREAD_POOL_SIZE = int(os.getenv("THREAD_POOL_SIZE", 10))
+NVD_THREAD_POOL_SIZE = int(os.getenv("NVD_THREAD_POOL_SIZE", 3))
 
 # API Sleep
 EPSS_DELAY = 0.5
