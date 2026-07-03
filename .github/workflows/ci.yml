@@ -3,11 +3,11 @@ name: UniVulner CI Pipeline
 on:
   push:
     branches:
-      - deployment
+      - deployment-v2
 
   pull_request:
     branches:
-      - deployment
+      - deployment-v2
 
 jobs:
   build-and-test:

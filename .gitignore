@@ -3,6 +3,10 @@ sync_metadata.json
 # Environment Variables
 .env
 
+database/
+\database
+database
+
 # Python
 __pycache__/
 *.pyc
