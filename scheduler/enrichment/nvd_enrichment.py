@@ -21,7 +21,7 @@ class NVDEnrichmentJob(BaseEnrichmentJob):
 
         if result["cvss_score"] is None:
             return None
-        
+
         return {
             "cve_id": record["cve_id"],
             "fields": {
@@ -32,7 +32,7 @@ class NVDEnrichmentJob(BaseEnrichmentJob):
                 "nvd_processed": True,
             },
         }
-    
+
     def run(self, limit=100):
         records = self.get_records(limit)
         print("NVD Pending :", len(records))

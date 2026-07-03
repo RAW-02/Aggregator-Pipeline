@@ -187,3 +187,41 @@ class OpenSearchRepository(VulnerabilityRepository):
         result = self.client.search(index=self.index_name, body=query)
 
         return [hit["_source"] for hit in result["hits"]["hits"]]
+
+    def get_pending_github(self, limit=25):
+
+        query = {
+            "size": limit,
+            "_source": [
+                "cve_id",
+                "kev_status",
+                "cvss_score",
+                "epss_score",
+            ],
+            "sort": [
+                {
+                    "published_date": {
+                        "order": "desc",
+                        "unmapped_type": "date",
+                    }
+                }
+            ],
+            "query": {
+                "bool": {
+                    "must_not": [{"term": {"github_processed": True}}],
+                    "should": [
+                        {"term": {"kev_status": True}},
+                        {"range": {"cvss_score": {"gte": 8}}},
+                        {"range": {"epss_score": {"gte": 0.5}}},
+                    ],
+                    "minimum_should_match": 1,
+                }
+            },
+        }
+
+        result = self.client.search(
+            index=self.index_name,
+            body=query,
+        )
+
+        return [hit["_source"] for hit in result["hits"]["hits"]]

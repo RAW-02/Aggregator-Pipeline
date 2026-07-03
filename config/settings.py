@@ -29,7 +29,7 @@ else:
     INITIAL_LOAD_LIMIT = int(INITIAL_LOAD_LIMIT)
 
 
-THREAD_POOL_SIZE = int(os.getenv("THREAD_POOL_SIZE", 10))
+THREAD_POOL_SIZE = int(os.getenv("THREAD_POOL_SIZE", 1))
 NVD_THREAD_POOL_SIZE = int(os.getenv("NVD_THREAD_POOL_SIZE", 3))
 
 # API Sleep
@@ -39,7 +39,7 @@ KEV_DELAY = 0.2
 
 EXPLOITDB_DELAY = 0.5
 
-ENRICHMENT_LIMIT = int(os.getenv("ENRICHMENT_LIMIT", 1000))
+ENRICHMENT_LIMIT = int(os.getenv("ENRICHMENT_LIMIT", 25))
 ENRICHMENT_INTERVAL = int(os.getenv("ENRICHMENT_INTERVAL", 5))
 
 NVD_API_KEY = os.getenv("NVD_API_KEY")
@@ -50,4 +50,4 @@ NVD_DELAY = float(os.getenv("NVD_DELAY", 1))
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_TIMEOUT = int(os.getenv("GITHUB_TIMEOUT", 20))
 GITHUB_MAX_RETRIES = int(os.getenv("GITHUB_MAX_RETRIES", 2))
-GITHUB_DELAY = float(os.getenv("GITHUB_DELAY", 2))
+GITHUB_DELAY = float(os.getenv("GITHUB_DELAY", 2.1))

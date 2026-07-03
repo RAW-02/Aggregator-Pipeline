@@ -1,39 +1,34 @@
 from scheduler.enrichment.base_enrichment import BaseEnrichmentJob
-
 from github_engine.main import github_engine
 
 
 class GithubEnrichmentJob(BaseEnrichmentJob):
+
     source = "github"
 
-    def enrich_record(self, record):
-        print("GITHUB :", record["cve_id"])
+    def get_records(self, limit):
+        return self.repository.get_pending_github(limit)
 
-        if (
-            record.get("kev_status")
-            or (record.get("cvss_score") or 0) >= 8
-            or (record.get("epss_score") or 0) >= 0.5
-        ):
-            github = github_engine(record["cve_id"])
-        else:
-            github = {
-                "repository_count": 0,
-                "aliases": [],
-                "related_cves": [],
-                "top_pocs": [],
-                "top_scanners": [],
-                "top_exploits": [],
-            }
+    def enrich_record(self, record):
+
+        cve_id = record["cve_id"]
+
+        print("GITHUB :", cve_id)
+
+        github = github_engine(cve_id)
+
+        if github is None:
+            return None
 
         return {
-            "cve_id": record["cve_id"],
+            "cve_id": cve_id,
             "fields": {
-                "github_repository_count": github["repository_count"],
-                "github_aliases": github["aliases"],
-                "github_related_cves": github["related_cves"],
-                "github_top_pocs": github["top_pocs"],
-                "github_top_scanners": github["top_scanners"],
-                "github_top_exploits": github["top_exploits"],
+                "github_repository_count": github.get("repository_count", 0),
+                "github_aliases": github.get("aliases", []),
+                "github_related_cves": github.get("related_cves", []),
+                "github_top_pocs": github.get("top_pocs", []),
+                "github_top_scanners": github.get("top_scanners", []),
+                "github_top_exploits": github.get("top_exploits", []),
                 "github_processed": True,
             },
         }

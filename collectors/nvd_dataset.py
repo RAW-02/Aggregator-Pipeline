@@ -3,6 +3,7 @@ import os
 
 CACHE_PATH = "database/nvd_cache.json"
 
+
 class NVDDataset:
     def load(self):
 
