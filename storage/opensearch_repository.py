@@ -199,20 +199,17 @@ class OpenSearchRepository(VulnerabilityRepository):
                 "epss_score",
             ],
             "sort": [
-                {
-                    "published_date": {
-                        "order": "desc",
-                        "unmapped_type": "date",
-                    }
-                }
+                {"kev_status": {"order": "desc", "unmapped_type": "boolean"}},
+                {"epss_score": {"order": "desc", "unmapped_type": "float"}},
+                {"cvss_score": {"order": "desc", "unmapped_type": "float"}},
             ],
             "query": {
                 "bool": {
                     "must_not": [{"term": {"github_processed": True}}],
                     "should": [
                         {"term": {"kev_status": True}},
-                        {"range": {"cvss_score": {"gte": 8}}},
-                        {"range": {"epss_score": {"gte": 0.5}}},
+                        {"range": {"cvss_score": {"gte": 9}}},
+                        {"range": {"epss_score": {"gte": 0.7}}},
                     ],
                     "minimum_should_match": 1,
                 }
