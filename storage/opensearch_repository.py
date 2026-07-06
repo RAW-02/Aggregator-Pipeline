@@ -208,8 +208,8 @@ class OpenSearchRepository(VulnerabilityRepository):
                     "must_not": [{"term": {"github_processed": True}}],
                     "should": [
                         {"term": {"kev_status": True}},
-                        {"range": {"cvss_score": {"gte": 9}}},
-                        {"range": {"epss_score": {"gte": 0.7}}},
+                        {"range": {"cvss_score": {"gte": 8}}},
+                        {"range": {"epss_score": {"gte": 0.4}}},
                     ],
                     "minimum_should_match": 1,
                 }
