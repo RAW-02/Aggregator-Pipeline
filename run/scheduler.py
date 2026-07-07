@@ -18,8 +18,8 @@ def main():
         # NVDEnrichmentJob(),
         # KEVEnrichmentJob(),
         # ExploitDBEnrichmentJob(),
-        GithubEnrichmentJob(),
-        # ThreatScoreEnrichmentJob(),
+        # GithubEnrichmentJob(),
+        ThreatScoreEnrichmentJob(),
     ]
 
     while True:

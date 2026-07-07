@@ -222,3 +222,24 @@ class OpenSearchRepository(VulnerabilityRepository):
         )
 
         return [hit["_source"] for hit in result["hits"]["hits"]]
+
+    def get_pending_threat(self, limit=1000):
+        query = {
+            "size": limit,
+            "_source": [
+                "cve_id",
+                "cvss_score",
+                "epss_score",
+                "kev_status",
+                "exploit_available",
+                "github_repository_count",
+            ],
+            "query": {"bool": {"must_not": [{"term": {"threat_processed": True}}]}},
+        }
+
+        result = self.client.search(
+            index=self.index_name,
+            body=query,
+        )
+
+        return [hit["_source"] for hit in result["hits"]["hits"]]
