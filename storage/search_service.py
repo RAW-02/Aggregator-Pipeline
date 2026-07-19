@@ -417,3 +417,24 @@ class SearchService:
             },
             "references": doc.get("references", []),
         }
+
+    def search_inventory_component(self, vendor, product, page=1, size=100):
+        query = {
+            "query": {
+                "bool": {
+                    "should": [
+                        {
+                            "wildcard": {
+                                "products.keyword": {
+                                    "value": f"*{vendor.lower()}:{product.lower()}*"
+                                }
+                            }
+                        },
+                        {"match": {"product_keywords": product.lower()}},
+                    ],
+                    "minimum_should_match": 1,
+                }
+            }
+        }
+
+        return self._execute_search(query, page, size)
