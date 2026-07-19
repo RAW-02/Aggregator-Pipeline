@@ -9,7 +9,7 @@ from inventory.assessment import RiskAssessment
 
 from storage.search_service import SearchService
 
-router = APIRouter(prefix="/inventory", tags=["Inventory"])
+router = APIRouter(prefix="/api/inventory", tags=["Inventory"])
 
 service = InventoryService(
     parser=InventoryParser(),
