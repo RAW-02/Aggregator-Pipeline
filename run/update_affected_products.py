@@ -26,9 +26,7 @@ def main():
         updates.append(
             {
                 "cve_id": cve_id,
-                "fields": {
-                    "affected_products": result.get("affected_products", [])
-                }
+                "fields": {"affected_products": result.get("affected_products", [])},
             }
         )
 

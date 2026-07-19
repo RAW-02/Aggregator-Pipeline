@@ -84,11 +84,7 @@ class OpenSearchRepository(VulnerabilityRepository):
         return self.client.search(index=self.index_name, body=query)
 
     def get_all(self, batch_size=1000):
-        query = {
-            "query": {
-                "match_all": {}
-            }
-        }
+        query = {"query": {"match_all": {}}}
 
         search_after = None
         while True:
