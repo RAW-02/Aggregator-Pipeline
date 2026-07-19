@@ -29,6 +29,12 @@ class InventoryMatcher:
             vendor=component.vendor, product=component.product, page=1, size=500
         )
 
+        # Temporary Debug Logs
+        print("=" * 60)
+        print(f"Component: {component.vendor}:{component.product}")
+        print(f"Total Hits: {response['hits']['total']}")
+        print("=" * 60)
+
         vulnerabilities = []
         highest_score = 0.0
         hits = response.get("hits", {}).get("hits", [])
