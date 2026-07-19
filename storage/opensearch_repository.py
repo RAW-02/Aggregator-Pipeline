@@ -83,12 +83,14 @@ class OpenSearchRepository(VulnerabilityRepository):
 
         return self.client.search(index=self.index_name, body=query)
 
-    def get_all(self):
-        query = {"query": {"match_all": {}}}
+    def get_all(self, batch_size=1000):
+        query = {
+            "query": {
+                "match_all": {}
+            }
+        }
 
-        records = []
         search_after = None
-
         while True:
             body = query.copy()
 
@@ -96,7 +98,10 @@ class OpenSearchRepository(VulnerabilityRepository):
                 body["search_after"] = search_after
 
             result = self.client.search(
-                index=self.index_name, body=body, size=1000, sort=["cve_id"]
+                index=self.index_name,
+                body=body,
+                size=batch_size,
+                sort=["cve_id"],
             )
 
             hits = result["hits"]["hits"]
@@ -104,11 +109,9 @@ class OpenSearchRepository(VulnerabilityRepository):
                 break
 
             for hit in hits:
-                records.append(hit["_source"])
+                yield hit["_source"]
 
             search_after = hits[-1]["sort"]
-
-        return records
 
     def count(self):
         return self.client.count(index=self.index_name)["count"]
