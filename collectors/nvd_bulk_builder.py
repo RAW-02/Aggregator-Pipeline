@@ -115,7 +115,7 @@ def build_cache():
                     "cvss_score": result.cvss_score,
                     "severity": result.severity,
                     "cwe": result.cwe,
-                    "products": result.affected_products,
+                    "products": result.products,
                     "affected_products": result.affected_products,
                 }
 
