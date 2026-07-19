@@ -17,24 +17,22 @@ class InventoryMatcher:
             cvss_score=hit.get("cvss_score", 0),
             epss_score=hit.get("epss_score", 0),
             threat_score=hit.get("threat_score", 0),
-            kev=hit.get("kev", False),
+            kev=hit.get("kev_status", False),
             exploit_available=hit.get("exploit_available", False),
         )
 
-    def match(
-        self,
-        component: InventoryComponent,
-    ) -> ComponentReport:
+    def match(self, component: InventoryComponent, ) -> ComponentReport:
         response = self.search_service.search_inventory_component(
             vendor=component.vendor, product=component.product, page=1, size=500
         )
 
         vulnerabilities = []
         highest_score = 0.0
-        hits = response.get("results", [])
+        hits = response.get("hits", {}).get("hits", [])
 
         for hit in hits:
-            vulnerability = self.build_vulnerability(hit)
+            source = hit.get("_source", {})
+            vulnerability = self.build_vulnerability(source)
             vulnerabilities.append(vulnerability)
 
             highest_score = max(highest_score, vulnerability.threat_score)
