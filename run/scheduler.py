@@ -15,11 +15,11 @@ from time import sleep
 def main():
     jobs = [
         # EPSSEnrichmentJob(),
-        # NVDEnrichmentJob(),
+        NVDEnrichmentJob(),
         # KEVEnrichmentJob(),
         # ExploitDBEnrichmentJob(),
         # GithubEnrichmentJob(),
-        ThreatScoreEnrichmentJob(),
+        # ThreatScoreEnrichmentJob(),
     ]
 
     while True:

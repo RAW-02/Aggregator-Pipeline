@@ -48,13 +48,46 @@ class NVDDataNormalizer:
 
         return sorted(products)
 
+    @staticmethod
+    def extract_affected_products(configurations):
+        affected = []
+
+        for config in configurations:
+            for node in config.get("nodes", []):
+                for match in node.get("cpeMatch", []):
+
+                    criteria = match.get("criteria", "")
+                    parts = criteria.split(":")
+
+                    if len(parts) < 5:
+                        continue
+
+                    affected.append(
+                        {
+                            "vendor": parts[3],
+                            "product": parts[4],
+                            "version_start_including": match.get(
+                                "versionStartIncluding"
+                            ),
+                            "version_start_excluding": match.get(
+                                "versionStartExcluding"
+                            ),
+                            "version_end_including": match.get("versionEndIncluding"),
+                            "version_end_excluding": match.get("versionEndExcluding"),
+                        }
+                    )
+        return affected
+
     def get_result(self, raw_vulnerability):
         cve = raw_vulnerability["cve"]
         score, severity = self.extract_cvss(cve.get("metrics", {}))
+
+        configurations = cve.get("configurations", [])
 
         return NVD_Model(
             cvss_score=score,
             severity=severity,
             cwe=self.extract_cwe(cve.get("weaknesses", [])),
-            affected_products=self.extract_products(cve.get("configurations", [])),
+            products=self.extract_products(configurations),
+            affected_products=self.extract_affected_products(configurations),
         )

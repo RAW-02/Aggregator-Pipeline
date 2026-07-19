@@ -116,6 +116,7 @@ def build_cache():
                     "severity": result.severity,
                     "cwe": result.cwe,
                     "products": result.affected_products,
+                    "affected_products": result.affected_products,
                 }
 
             except Exception as e:
@@ -152,8 +153,3 @@ def build_cache():
 
 if __name__ == "__main__":
     build_cache()
-
-
-# from config.settings import NVD_API_KEY
-
-# print("NVD_API_KEY =", NVD_API_KEY)

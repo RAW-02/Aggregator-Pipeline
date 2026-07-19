@@ -29,6 +29,7 @@ class NVDEnrichmentJob(BaseEnrichmentJob):
                 "severity": result["severity"],
                 "cwe": result["cwe"],
                 "products": result["products"],
+                "affected_products": result["affected_products"],
                 "nvd_processed": True,
             },
         }
