@@ -98,6 +98,30 @@
 
       "github_top_exploits": {
         "type": "nested"
+      },
+
+      "affected_products": {
+        "type": "nested",
+        "properties": {
+          "vendor": {
+            "type": "keyword"
+          },
+          "product": {
+            "type": "keyword"
+          },
+          "version_start_including": {
+            "type": "keyword"
+          },
+          "version_start_excluding": {
+            "type": "keyword"
+          },
+          "version_end_including": {
+            "type": "keyword"
+          },
+          "version_end_excluding": {
+            "type": "keyword"
+          }
+        }
       }
     }
   }

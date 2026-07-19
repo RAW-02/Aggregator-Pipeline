@@ -170,7 +170,16 @@ class OpenSearchRepository(VulnerabilityRepository):
             )
 
         if actions:
-            bulk(self.client, actions, refresh=False)
+            success, errors = bulk(
+                self.client,
+                actions,
+                refresh=False,
+                raise_on_error=False,
+            )
+
+            return success, errors
+
+        return 0, []
 
     def get_pending_nvd(self, limit=100):
         query = {
