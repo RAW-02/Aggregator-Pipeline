@@ -21,7 +21,10 @@ class InventoryMatcher:
             exploit_available=hit.get("exploit_available", False),
         )
 
-    def match(self, component: InventoryComponent, ) -> ComponentReport:
+    def match(
+        self,
+        component: InventoryComponent,
+    ) -> ComponentReport:
         response = self.search_service.search_inventory_component(
             vendor=component.vendor, product=component.product, page=1, size=500
         )
