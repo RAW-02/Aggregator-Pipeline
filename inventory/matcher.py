@@ -3,6 +3,8 @@ from inventory.models import (
     ComponentReport,
     MatchedVulnerability,
 )
+from schemas.vulnerability import AffectedProduct
+from inventory.version_comparator import VersionComparator
 
 
 class InventoryMatcher:
@@ -28,8 +30,7 @@ class InventoryMatcher:
         response = self.search_service.search_inventory_component(
             vendor=component.vendor, product=component.product, page=1, size=500
         )
-
-        # Temporary Debug Logs
+        
         print("=" * 60)
         print(f"Component: {component.vendor}:{component.product}")
         print(f"Total Hits: {response['hits']['total']}")
@@ -41,10 +42,27 @@ class InventoryMatcher:
 
         for hit in hits:
             source = hit.get("_source", {})
+
+            print("=" * 80)
+            print("Component Version :", component.version)
+            print("CVE :", source.get("cve_id"))
+            print("Affected Products :", source.get("affected_products"))
+            
+            match = self.is_version_match(component, source)
+
+            print("Version Match :", match)
+
+            if not match:
+                continue
+
             vulnerability = self.build_vulnerability(source)
+
             vulnerabilities.append(vulnerability)
 
-            highest_score = max(highest_score, vulnerability.threat_score)
+            highest_score = max(
+                highest_score,
+                vulnerability.threat_score,
+            )
 
         return ComponentReport(
             host=component.host,
@@ -54,3 +72,29 @@ class InventoryMatcher:
             highest_threat_score=highest_score,
             vulnerabilities=vulnerabilities,
         )
+
+    def is_version_match(
+        self,
+        component: InventoryComponent,
+        source: dict,
+    ) -> bool:
+
+        affected_products = source.get("affected_products", [])
+        if not affected_products:
+            return True
+
+        for product in affected_products:
+            affected = AffectedProduct(**product)
+            if affected.vendor.lower() != component.vendor.lower():
+                continue
+
+            if affected.product.lower() != component.product.lower():
+                continue
+
+            if VersionComparator.is_vulnerable(
+                component.version,
+                affected,
+            ):
+                return True
+
+        return False
