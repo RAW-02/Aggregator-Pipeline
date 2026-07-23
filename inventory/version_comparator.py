@@ -5,7 +5,10 @@ from schemas.vulnerability import AffectedProduct
 class VersionComparator:
 
     @staticmethod
-    def is_vulnerable(inventory_version: str, affected_product: AffectedProduct,) -> bool:
+    def is_vulnerable(
+        inventory_version: str,
+        affected_product: AffectedProduct,
+    ) -> bool:
 
         if not inventory_version:
             return True

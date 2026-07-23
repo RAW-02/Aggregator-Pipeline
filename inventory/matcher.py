@@ -30,7 +30,7 @@ class InventoryMatcher:
         response = self.search_service.search_inventory_component(
             vendor=component.vendor, product=component.product, page=1, size=500
         )
-        
+
         print("=" * 60)
         print(f"Component: {component.vendor}:{component.product}")
         print(f"Total Hits: {response['hits']['total']}")
@@ -47,7 +47,7 @@ class InventoryMatcher:
             print("Component Version :", component.version)
             print("CVE :", source.get("cve_id"))
             print("Affected Products :", source.get("affected_products"))
-            
+
             match = self.is_version_match(component, source)
 
             print("Version Match :", match)
