@@ -90,11 +90,11 @@ jobs:
             --user root \
             -v "${{ github.workspace }}/reports:/zap/wrk" \
             ghcr.io/zaproxy/zaproxy:stable \
-            zap-baseline.py \
-            -t "${{ secrets.APP_URL }}" \
+            zap-api-scan.py \
+            -t "${{ secrets.APP_URL }}/openapi.json" \
+            -f openapi \
             -J report.json \
-            -r report.html \
-            -m 5
+            -r report.html
 
       - name: Setup Python
         uses: actions/setup-python@v5
