@@ -61,3 +61,51 @@ jobs:
             docker image prune -f
 
             docker ps
+
+      - name: Wait for FastAPI
+        run: |
+          for i in {1..12}; do
+            if curl -fsS "${{ secrets.APP_URL }}/openapi.json" > /dev/null; then
+              echo "Application is ready"
+              exit 0
+            fi
+            echo "Waiting..."
+            sleep 5
+          done
+          echo "Application did not become ready"
+          exit 1
+
+
+      - name: Pull OWASP ZAP Image
+        run: docker pull ghcr.io/zaproxy/zaproxy:stable
+
+      - name: Run OWASP ZAP Baseline Scan
+        continue-on-error: true
+        run: |
+          mkdir -p reports
+      
+          docker run --rm \
+            -v ${{ github.workspace }}/reports:/zap/wrk \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py \
+            -t ${{ secrets.APP_URL }} \
+            -J report.json \
+            -r report.html
+            -m 5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          
+      - name: Parse ZAP Report
+        if: always()
+        run: |
+          python dast/zap_parser.py
+
+      - name: Upload ZAP Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: reports/

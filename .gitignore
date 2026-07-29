@@ -21,3 +21,6 @@ __pycache__/
 # Logs
 logs/
 *.log
+
+reports/*
+!reports/.gitkeep
