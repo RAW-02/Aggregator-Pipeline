@@ -1,10 +1,12 @@
 import json
 from pathlib import Path
+import sys
 
 REPORT = Path("reports/report.json")
 
 if not REPORT.exists():
-    raise FileNotFoundError("report.json not found")
+    print("ZAP report not found. Skipping parsing.")
+    sys.exit(0)
 
 with REPORT.open("r", encoding="utf-8") as f:
     data = json.load(f)

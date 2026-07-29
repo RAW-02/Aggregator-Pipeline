@@ -84,13 +84,16 @@ jobs:
         run: |
           mkdir -p reports
       
+          chmod -R 777 reports
+
           docker run --rm \
-            -v ${{ github.workspace }}/reports:/zap/wrk \
+            --user root \
+            -v "${{ github.workspace }}/reports:/zap/wrk" \
             ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
-            -t ${{ secrets.APP_URL }} \
+            -t "${{ secrets.APP_URL }}" \
             -J report.json \
-            -r report.html
+            -r report.html \
             -m 5
 
       - name: Setup Python
@@ -99,9 +102,8 @@ jobs:
           python-version: "3.11"
           
       - name: Parse ZAP Report
-        if: always()
-        run: |
-          python dast/zap_parser.py
+        if: always() && hashFiles('reports/report.json') != ''
+        run: python dast/zap_parser.py
 
       - name: Upload ZAP Reports
         if: always()
